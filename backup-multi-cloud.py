@@ -16,6 +16,33 @@ def enablePrint():
 def blockPrint():
     sys.stdout = open(os.devnull, 'w')
 
+
+#Fonction de listing des sdk cloud
+def listing_cloud():
+    print("Liste des services cloud disponibles :" )
+
+
+#Fonction des plans de sauvegardes existants
+def listing_plan():
+    print("Liste des services cloud disponibles :" )
+
+
+#Fonction de création d'un nouveau plan de sauvegarde
+def creation():
+    input("Veuillez choisir un cloud cible [Lecture liste sdk dispo] :")
+
+
+#Fonction d'éxécution d'un plan de sauvegarde existant
+def execution ():
+    enablePrint()
+    input("Veuillez choisir un plan de sauvegarde à executer [Lecture liste plans de sauvegarde] : ")
+
+
+#Fonction de restauration d'un plan de sauvegarde existant
+def restauration ():
+    input("Veuillez choisir un plan de sauvegarde à restaurer [Lecture liste plans de sauvegarde] : ")
+
+
 #Fonction "lancement" qui s'appuie sur les arguments saisis ou les demande si absent et appel les fonctions associées
 def lancement(mode):
     
