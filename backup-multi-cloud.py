@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-import sys, argparse, os
+import sys, argparse, os, configparser
+from package import *
 
 #Gestion du lancement, de l'aide, et des arguments optionnels et positionnels
 parser = argparse.ArgumentParser(description="Sauvegarde/restaration multi Cloud")
@@ -16,10 +17,24 @@ def enablePrint():
 def blockPrint():
     sys.stdout = open(os.devnull, 'w')
 
+#Variables Gobales
+cloud = " "
+cfg = configparser.ConfigParser()
+file_path = " "
 
 #Fonction de listing des sdk cloud
 def listing_cloud():
-    print("Liste des services cloud disponibles :" )
+    enablePrint()
+    list_pack = os.listdir('./package')     #Liste les sous-dossiers du dossier "package" qui sont nommés selon les plateformes cloud
+    print("Liste des services cloud disponibles : " + str(list_pack))
+    global cloud
+    cloud = input("Saisir la plateforme cloud à utiliser : ")
+    while True:       #Boucle pour choisir une plateforme valide dans la liste
+        if cloud in list_pack:
+            print("La plateforme "+ cloud + " a été choisie comme cible de la sauvegarde.")
+            break
+        else:
+            cloud = input("Saisir la plateforme cloud à utiliser (sensible à la casse): ")
 
 
 #Fonction des plans de sauvegardes existants
@@ -29,7 +44,24 @@ def listing_plan():
 
 #Fonction de création d'un nouveau plan de sauvegarde
 def creation():
-    input("Veuillez choisir un cloud cible [Lecture liste sdk dispo] :")
+    listing_cloud() #Appel de la fontion pour lister les plateformes cloud disponible
+    dir_conf = "./conf"
+    
+    while True:
+        plan_name = input("Donner un nom/numéro unique à votre plan : ")
+        file_conf = "Sauvegarde-" + str(cloud) +"-"+ str(plan_name)+".cfg"
+        global file_path
+        file_path = os.path.join(dir_conf, file_conf)
+        file_exists = os.path.isfile(file_path) 
+        if file_exists:
+            print("Ce nom est déjà utilisé.")
+        else:
+            cfg.add_section(file_conf)
+            cfg.set(file_conf, 'cloud cible', str(cloud))
+            cfg.write(open(file_path,'w'))
+            cloud_create_conf = 'create_' + cloud.lower()
+            eval(cloud_create_conf + '(file_conf)')
+            break
 
 
 #Fonction d'éxécution d'un plan de sauvegarde existant
