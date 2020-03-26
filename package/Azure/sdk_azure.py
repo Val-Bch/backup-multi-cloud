@@ -4,14 +4,21 @@ from datetime import datetime, timedelta
 
 cfg = configparser.ConfigParser()
 
+#Fonction appelée par la fonction générale de création, pour la création d'un plan de sauvegarde avec Azure Storage Blob
+#Récupère en paramètre la variable file_conf qui contient le nom du plan sur lequel travailler
+#Met à jour le fichier.cfg avec les particularités de connexions liées à cette plateforme Cloud (ici la variable connect-str qui contient la chaine de connexion Azure)
 def create_azure(file_conf):
-    dir_conf = "../../conf"
+    dir_conf = "./conf"     #Chemin relatif selon le dossier d'éxécution du script principal qui appel cette fonction
     file_path = os.path.join(dir_conf, file_conf)
-    connect_str = input("Saisir la chaine de connexion (dans 'Clé d'accès' du menu 'Paramètres' du compte de stockage Azure) : ")
-    cfg.set(file_conf, 'connect_str', str(connect_str))
-    cfg.write(open(file_path,'w'))
+    connect_str = input("----------------\nEntrer la chaine de connexion (dans 'Clé d'accès' du menu 'Paramètres' du compte de stockage Azure) : ")
+    cfg.read(file_path)     #Ouverture du fichier .cfg du plan
+    cfg.set(file_conf, 'connect_str', str(connect_str)) #ajout de la clé connect_str qui contient la chaine de connexion du compte Azure
+    cfg.write(open(file_path,'w'))  #Sauvegarde dans le fichier .cfg
 
 
+#Fonction appelée lors de l'exécution d'une sauvegarde par le script principal
+#Contient le sdk python fournit par Azure, avec quelques ajustements.
+#Récupère en paramètre la variable file_conf qui contient le nom du plan sur lequel travailler
 def save_azure(file_conf):
     try:
         print("Azure Blob storage v12")
@@ -27,7 +34,7 @@ def save_azure(file_conf):
         date_Value = datetime.now().strftime('%Y-%m-%d-%Hh-%Mm-%Ss')
 
         # Variable pour créer un nom unique au contenaire basé sur save- + la date 
-        container_name = "save" + date_Value
+        container_name = "save-" + date_Value
 
         # Création du contenaire
         container_client = blob_service_client.create_container(container_name)
