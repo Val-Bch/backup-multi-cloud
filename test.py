@@ -1,9 +1,9 @@
-import os, uuid, glob, configparser
+import os, uuid, glob, configparser, unicodedata, re
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 from datetime import datetime, timedelta
 
 date_Value = datetime.now().strftime('%Y-%m-%d-%Hh-%Mm-%Ss')
-local_path = "c:/Users/Valentin/Desktop/Temp/Git/backup-multi-cloud/SDK_cloud/Azure/data"
+local_path = "c:/Users/Valentin/Desktop/Temp"
 local_file_name = "essai-" + date_Value + ".txt"
 upload_file_path = os.path.join(local_path, local_file_name)
 cfg = configparser.ConfigParser()
@@ -33,4 +33,9 @@ def listing_plan():
                 return plan
             else:
                  pass         
-listing_plan()
+
+for files in os.listdir(local_path):
+    if os.path.isdir(files):
+        print(files)
+    else:
+        print(files +" : est un fichier ")

@@ -1,4 +1,4 @@
-import os, uuid, configparser
+import os, uuid, configparser, unicodedata, re
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 from datetime import datetime, timedelta
 
@@ -16,7 +16,18 @@ def create_azure(file_conf, path_conf):
 
     # Demande les détails pour la sauvegarde Azure (Clé d'accès, nom du conteneur)
     connect_str = input("----------------\nEntrer la chaine de connexion (dans 'Clé d'accès' du menu 'Paramètres' du compte de stockage Azure) : ")
-    container_name =  input("----------------\nEntrer le nom du conteneur d'objet Blob Azure à créer/utiliser : ") 
+    container_name =  input("----------------\nEntrer le nom du conteneur d'objet Blob Azure à créer/utiliser (help) : ") 
+    if container_name == "help":    # Affiche l'aide selon les informations Azure
+        print("     ###########################\n                 AIDE\n     ###########################\n")
+        print("\n    - Le nom doit avoir entre 3 et 63 caractères.\n      - Ce nom peut contenir seulement des lettres MINUSCULES, des chiffres et des traits d'union.\n")
+        print("    - Il doit commencer par une lettre ou un chiffre.\n")
+        print("    - Chaque trait d'union doit être précédé et suivi d'un caractère autre qu'un trait d'union.\n")
+        print("    - Il doit commencer par une lettre ou un chiffre.\n")
+    else:   # Sinon on essaie de nettoyer la saisie en supprimant les accents, les majuscules, les caractères spéciaux et les espaces
+        container_name_correct = unicodedata.normalize('NFKD', container_name)
+        container_name_correct =  container_name_correct.encode('ascii', 'ignore').decode('ascii').lower()
+        container_name_correct = re.sub('[^A-z0-9 -]', '', container_name_correct).replace(" ", "").replace("--", "-").replace("^", "").replace("[", "").replace("]", "").replace("\\", "").replace("_", "-")
+        container_name = container_name_correct
 
     # Ouverture du fichier.cgf cible, inscription des variables saisies dans des clés de la section principale, puis sauvegarde du fichier
     cfg.read(file_path)
@@ -25,75 +36,55 @@ def create_azure(file_conf, path_conf):
     cfg.write(open(file_path,'w'))
 
 
-def save_azure(file_conf, path_conf, path_package):
+def save_azure(file_path, choix_plan):
     """ 
     Fonction appelée lors de l'exécution d'une sauvegarde par le script principal
     Contient le sdk python fournit par Azure, avec quelques ajustements.
     Récupère en paramètre la variable file_conf qui contient le nom du plan sur lequel travailler
     """
     try:
-        print("Azure Blob storage v12")
+        print("Exécution d'une sauvegarde Azure Blob storage")
         
         # Ouverture du fichier.cfg et stockage dans des variables pour les clés nécessaires
-        cfg.read(file_conf)
-        connect_str = cfg.get(file_conf, 'connect_str') 
-        container_name =cfg.get(file_conf, 'container_name') 
+        cfg.read(file_path)
+        connect_str = cfg.get(choix_plan, 'connect_str') 
+        container_name = cfg.get(choix_plan, 'container_name')
+        path_source = cfg.get(choix_plan, 'path_source') 
 
         # Créez l'objet BlobServiceClient qui sera utilisé pour créer un client conteneur
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
         
         # Défini un variable 'date_Value' qui contient la date+heure actuelle + création d'un nom unique au contenaire basé sur save- + la date 
         date_Value = datetime.now().strftime('%Y-%m-%d-%Hh-%Mm-%Ss') 
-        container_name = "save-" + date_Value
+        
+        # Récupère la liste des containers dans une variable
+        container_online = blob_service_client.list_containers()  
+        
+        # Pour charque item de container_online, on l'ajoute à la liste container_list
+        container_list = []
+        for item in container_online:      
+            container_list.append(item.name)
+        
+        if container_name in container_list:    # Si le container existe déjà dans Azure, on continue le script
+            pass
+        else:   # Si le container n'existe pas on le créé
+            blob_service_client.create_container(container_name)
 
-        # Création du contenaire
-        container_client = blob_service_client.create_container(container_name)
+        #Scan du repertoire cible 
+        os.listdir(path_source)
 
-        # Create a file in local Documents directory to upload and download
-        local_path = "c:/Users/Valentin/Desktop/Temp/Git/backup-multi-cloud/SDK_cloud/Azure/data"
-        local_file_name = "essai-" + date_Value + ".txt"
-        upload_file_path = os.path.join(local_path, local_file_name)
+        for files in os.listdir(path_source):
+            
+            if os.path.isdir(files):
+                blob_client = blob_service_client.get_blob_client(container=container_name, blob=files)
+                upload_file_path = os.path.join(path_source, files)
+                blob_client.upload_dir(source, dest)
 
-        # Write text to the file
-        file = open(upload_file_path, 'w')
-        file.write("Hello, moi!")
-        file.close()
-
-        # Créez un client blob en utilisant le nom de fichier local comme nom pour le blob
-        blob_client = blob_service_client.get_blob_client(container=container_name, blob=local_file_name)
-
-        print("\nTéléchargement vers Azure Storage en tant qu'objet blob :\n\t" + local_file_name)
-
-        # Upload le fichier créé
-        with open(upload_file_path, "rb") as data:
-            blob_client.upload_blob(data)
-    
-    
-        print("\nListe des blobs...")
-
-        # Liste les blobs dans le container
-        blob_list = container_client.list_blobs()
-        for blob in blob_list:
-            print("\t" + blob.name)
-
-        # Téléchargez le blob dans un fichier local
-        # Ajoutez 'DL' avant l'extension .txt pour voir les deux fichiers dans Documents
-        download_file_path = os.path.join(local_path, str.replace(local_file_name ,'.txt', 'DL.txt'))
-        print("\nTéléchargement de blob sur \n\t" + download_file_path)
-
-        with open(download_file_path, "wb") as download_file:
-            download_file.write(blob_client.download_blob().readall())
-
-        # Clean up
-        print("\nAppuyez sur la touche Entrée pour commencer le nettoyage")
-        input()
-
-        print("Suppression du conteneur d'objets blob ...")
-        container_client.delete_container()
-
-        print("Suppression de la source locale et des fichiers téléchargés ...")
-        os.remove(upload_file_path)
-        os.remove(download_file_path)
+            else:
+                blob_client = blob_service_client.get_blob_client(container=container_name, blob=files)
+                upload_file_path = os.path.join(path_source, files)
+                with open(upload_file_path, "rb") as data:
+                    blob_client.upload_blob(data)
 
         print("Terminé.")
 
