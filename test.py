@@ -7,7 +7,7 @@ local_path = "c:/Users/Valentin/Desktop/Temp"
 local_file_name = "essai-" + date_Value + ".txt"
 upload_file_path = os.path.join(local_path, local_file_name)
 cfg = configparser.ConfigParser()
-
+init_path = os.path.abspath(os.path.dirname( __file__))
 
 def listing_plan():
 
@@ -34,8 +34,5 @@ def listing_plan():
             else:
                  pass         
 
-for files in os.listdir(local_path):
-    if os.path.isdir(files):
-        print(files)
-    else:
-        print(files +" : est un fichier ")
+
+
