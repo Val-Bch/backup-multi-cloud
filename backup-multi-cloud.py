@@ -10,8 +10,12 @@
 ###########################################
 #   Importation des fonctions externes :  #
 import sys, argparse, os, configparser
-import package.Azure.sdk_azure
-import package.AWS.sdk_aws
+from datetime import datetime, timedelta
+try:    # Test d'import des SDK et de la présence du dossier 'package'
+    import package.Azure.sdk_azure
+except: # Stop le script si manquant avec une explication
+    print("Le dossier 'package' contenant les SDK est absent ou il manque des SDK dedans. Veuillez le télécharger depuis GitHub.")
+    sys.exit()
 
 ##################################################################################
 #   Gestion du lancement, de l'aide, et des arguments optionnels et positionnels #
@@ -39,9 +43,13 @@ def blockPrint():
 ########################################
 #   Déclaration des variables gobales  #
 init_path = os.path.abspath(os.path.dirname( __file__)) # Récupère le chemin absolu du script
-path_conf = init_path + "/conf"                         # Ajoute le sous dossier conf à ce chemin
-path_package = init_path + "/package"                   # Ajoute le sous dossier package à ce chemin
-path_log = init_path + "/log"                   # Ajoute le sous dossier package à ce chemin
+path_conf = init_path + "/conf"                         # Ajoute et créé si besoinle sous dossier 'conf' à ce chemin
+if not os.path.isdir(path_conf):
+    os.makedirs(path_conf)
+path_package = init_path + "/package"                   # Ajoute le sous dossier 'package' à ce chemin
+path_log = init_path + "/log"                           # Ajoute et créé si besoin le sous dossier 'log' à ce chemin
+if not os.path.isdir(path_log) :
+    os.makedirs(path_log)
 list_conf = os.listdir(path_conf)                       # Liste les fichiers .cfg du dossier "conf"
 cfg = configparser.ConfigParser()
 choix_cloud = ""
@@ -61,16 +69,28 @@ def listing_cloud():
     enablePrint()                           # Active de force le mode verbeux
     list_cloud = os.listdir(path_package)   # Liste les sous-dossiers du dossier "package" qui sont nommés selon les plateformes cloud
     
-    print("----------------\nListe des services cloud disponibles : " + str(list_cloud))  # Affiche la liste des cloud dispo
-    choix_cloud = input("Saisir la plateforme cloud à utiliser : ")                       # Demande faire un choix
 
-    while True:                         # Boucle pour choisir une plateforme valide dans la liste
-        if choix_cloud in list_cloud:   # Si la saisie correspond à une entrée de la liste des packages cloud dispo
-            print("La plateforme "+ choix_cloud + " a été choisie comme cible de la sauvegarde.")
+
+    while True:
+        for i, elt in enumerate(list_cloud):
+            print("-----------------\nChoisir '{}' pour utiliser : '{}'.".format(i, elt))  # Enumère la liste avec ses indices pour créer des choix simple à saisir
+        choix_user = input("Saisir la plateforme cloud à utiliser (help) : ")                       # Demande faire un choix
+                                         
+        if choix_user== "help":     # Si saisie = help, affiche des explications
+            print("###########################\n|\t    AIDE\n|")
+            print("| ~~ Fonctionnement ~~\n|- Saisir un nombre entier (>=0) compris dans les choix proposés.")
+            print("|- Chaque nombre correspond à une plateforme de cloud dont le SDK est disponible.\n|")
+            print("| ~~ Exemple ~~\n|- Nombre choisi = '0'")
+            print("|  --> La plateforme '"+list_cloud[0]+"' sera utilisée.")
+            print("###########################")
+        elif not choix_user:            # Si la saisie est vide, on boucle
+            pass
+        elif choix_user.isdigit() and int(choix_user) < len(list_cloud) :    # Si la saisie est bien un nombre entier positif compris dans la 'liste_date'
+            print("La plateforme '"+ list_cloud[int(choix_user)] + "' a été choisie comme cible de la sauvegarde.")
+            choix_cloud = list_cloud[int(choix_user)]
             break
-        else:                           # Sinon réaffiche la liste et précise la sensibilité à la casse
-            choix_cloud = input("Saisir la plateforme cloud à utiliser (sensible à la casse)" + str(list_cloud) +" : ")
-
+        else:
+            continue
 
 
 def listing_plan():
@@ -87,24 +107,35 @@ def listing_plan():
     if choix_plan in vals:      # Si la valeur de choix_plan est dans la liste 'vals'
         return choix_plan       # Le plan choisi est valide et on retourne la variable globale 'choix_plan'
     else:                       # Sinon on propose la liste des plans dispos et on demande de faire un choix
-        print("\nListe des plans disponibles :\n~~~~~~~~~~~~ " + str(dct_conf) + " ~~~~~~~~~~~~\n")
+        if os.listdir(path_conf):   # Test si il y a des plans existant dans le dossier conf
+            
+            print("\nListe des plans disponibles :\n~~~~~~~~~~~~ " + str(dct_conf) + " ~~~~~~~~~~~~\n")
 
-        while True:             # Boucle pour choisir un plan valide dans la liste
-            choix_user = input("Saisir le numéro du plan de sauvegarde à utiliser "+str(list_nb)+" (help) : ")  # Affiche les choix possibles de la liste et propose de l'aide
-            if choix_user == "help":                                                                            # Si saisie = help, affiche des explications
-                print("     ###########################\n                 AIDE\n     ###########################\n")
-                print(" - Saisir un nombre entier de liste correspondant à un nom de fichier :\n    Exemple : "+str(dct_conf))
-                print("    Dans cette liste si le nombre saisi est '1', le fichier selectionné sera '"+str(dct_conf[int(1)])+"'\n")
+            while True:             # Boucle pour choisir un plan valide dans la liste
+                choix_user = input("Saisir le numéro du plan de sauvegarde à utiliser "+str(list_nb)+" (help) : ")  # Affiche les choix possibles de la liste et propose de l'aide
+                if choix_user == "help":                                                                            # Si saisie = help, affiche des explications
+                    print("###########################\n|\tAIDE\n|")
+                    print("|- Saisir un nombre entier de liste correspondant à un nom de fichier.\n|\t~~ Exemple ~~\n|"+str(dct_conf))
+                    print("|- Dans cette liste si le nombre saisi est '1', le fichier selectionné sera '"+str(dct_conf[int(1)])+"'")
+                    print("###########################")
 
-            elif not choix_user:                                                                 # Si la saisie est vide, réaffiche les choix possibles
-                print("\n~~~~~~~~~~~~ " + str(dct_conf) + " ~~~~~~~~~~~~\n")
-            elif (choix_user.isdigit()):                                                         # Si la saisie est nombre entier positif
-                if int(choix_user) in list_nb:                                                   # Si ce nombre saisi est dans la liste des choix possibles
-                    choix_plan = dct_conf[int(choix_user)]                                       # Variable globale 'choix_plan' = valeur de la clé du dico correspondante au choix user
-                    print("La fichier "+ choix_plan + " a été choisi.")
-                    return choix_plan
-                else:
-                    pass
+                elif not choix_user:                                                                 # Si la saisie est vide, réaffiche les choix possibles
+                    print("\n~~~~~~~~~~~~ " + str(dct_conf) + " ~~~~~~~~~~~~\n")
+                elif (choix_user.isdigit()):                                                         # Si la saisie est nombre entier positif
+                    if int(choix_user) in list_nb:                                                   # Si ce nombre saisi est dans la liste des choix possibles
+                        choix_plan = dct_conf[int(choix_user)]                                       # Variable globale 'choix_plan' = valeur de la clé du dico correspondante au choix user
+                        print("La fichier "+ choix_plan + " a été choisi.")
+                        return choix_plan
+                    else:
+                        pass
+        else: # Si il n'existe pas de plan dans le dossier conf propose d'en créer un nouveau
+            print("Aucun plan de sauvegarde trouvé dans le dossier 'conf'.")
+            create = input("Souhaitez-vous en créer un nouveau ? (o/n) : ")
+            if create == "o" or not create:
+                creation()
+            else:
+                sys.exit()
+
     
 
 def creation():
@@ -122,63 +153,98 @@ def creation():
         file_path = os.path.join(path_conf, file_conf)                        # Contruction du chemin absolu pour mener au fichier .cfg
         file_exists = os.path.isfile(file_path)                               # Variable de test sur l'existence d'un fichier homonyme dans le dossier ./conf
 
-        print("Le nom du fichier .cfg enregistré dans le dossier './conf' sera : "+ file_conf)
+        print("Le nom du fichier enregistré dans le dossier './conf' sera : "+ file_conf)
 
         if file_exists:
             print("Ce nom est déjà utilisé.")
-            continue
-        else:
-            cfg.add_section(file_conf)                              # Création d'une nouvelle section portant le nom du fichier
-            cfg.set(file_conf, 'cloud_cible', str(choix_cloud))     # Création d'une nouvelle clé dans la section qui définie la plateforme cloud choisi
-            while True:
-                path_source = input("----------------\nSaisir le chemin absolu du repertoire à sauvegarder (help) : ")
-                if path_source== "help":     # Si saisie = help, affiche des explications
-                    print("###########################\n\t    AIDE\n###########################\n")
-                    print("~~ Fonctionnement ~~\n- Saisir le chemin absolu du dossier racine à sauvegarder.\n- Le contenu de ce dossier sera sauvegardé de manière récursive. \n")
-                    print("~~ Exemple ~~\n  - Chemin saisi : '/usr/local/bin'")
-                    print("\t--> Tous les sous-dossiers et fichiers contenus dans '/usr/local/bin' seront sauvegardés.")
-                elif not path_source:            # Si la saisie est vide, on applique la valeur par défaut et on affiche 'result'
-                    print("Merci de saisir un chemin, la réponse ne peut-être vide.")
-                else:
-                    if os.path.isdir(path_source):
-                        print("Tout le contenu de '"+path_source+"' sera sauvegardé.")
-                        break
-                    else: 
-                        print("!! Attention, ce repertoire semble ne pas exister, si vous continuez, merci de le créer avant de lancer une sauvegarde.")
-                        try: 
-                            alerte = input("Continuer ? (o/n) : ")
-                            if alerte == "o":
-                                break
-                            elif alerte == "n":
-                                sys.exit()
-                        except Exception as ex:
-                            print('Exception:')
-                            print(ex)
+            reuse = input("Voulez-vous le réutiliser, ce plan sera écrasé ? (o/n) : ")
+            if reuse == "o" or not reuse:
+                pass
+            else :
+                continue
+        
+        cfg.add_section(file_conf)                              # Création d'une nouvelle section portant le nom du fichier
+        cfg.set(file_conf, 'cloud_cible', str(choix_cloud))     # Création d'une nouvelle clé dans la section qui définie la plateforme cloud choisi
+        while True:
+            path_source = input("----------------\nSaisir le chemin absolu du repertoire à sauvegarder (help) : ")
+            if path_source== "help":     # Si saisie = help, affiche des explications
+                print("###########################\n|\t    AIDE\n|")
+                print("| ~~ Fonctionnement ~~\n|- Saisir le chemin absolu du dossier racine à sauvegarder.\n|- Le contenu de ce dossier sera sauvegardé de manière récursive.\n|")
+                print("| ~~ Exemple ~~\n|- Chemin saisi : '/usr/local/bin'")
+                print("|  --> Tous les sous-dossiers et fichiers contenus dans '/usr/local/bin' seront sauvegardés.")
+                print("###########################")
+            elif not path_source:            # Si la saisie est vide, on applique la valeur par défaut et on affiche 'result'
+                print("Merci de saisir un chemin, la réponse ne peut-être vide.")
+            else:
+                if os.path.isdir(path_source):
+                    print("Tout le contenu de '"+path_source+"' sera sauvegardé.")
+                    break
+                else: 
+                    print("!! Attention, ce repertoire semble ne pas exister, si vous continuez, merci de le créer avant de lancer une sauvegarde.")
+                    try: 
+                        alerte = input("Continuer ? (o/n) : ")
+                        if alerte == "o" or not alerte:
+                            break
+                        elif alerte == "n":
+                            sys.exit()
+                    except Exception as ex:
+                        print('Exception:')
+                        print(ex)
             
-            while True:                     # Boucle tant que la saisie n'est pas nulle ou un nombre entier positif
-                bkp_rotate = input("----------------\nNombre de jours avant suppression des anciennes sauvegardes (défaut=7 | infini=0) (help): ")
-                result = "Les sauvegardes existantes depuis "+ str(bkp_rotate) + " jours et plus seront supprimées à chaque exécution de la sauvegarde."
-                               
-                if bkp_rotate== "help":     # Si saisie = help, affiche des explications
-                    print("###########################\n\t    AIDE\n###########################\n")
-                    print("~~ Fonctionnement ~~\n- Saisir un nombre entier >=0\n- 0 = ne jamais effacer les sauvegardes\n- Le calcul se base sur la date au moment de l'éxécution d'une sauvegarde.\n")
-                    print("~~ Exemple ~~\n  - Nombre choisi = '7'\n  - Une sauvegarde est planifiée tous les jours, à midi (Crontab) :")
-                    print("\t--> Les sauvegardes existantes depuis 7 jours et + (à la date d'éxécution) seront supprimées.")
-                    print("\t--> Ici, il restera donc toujours 7 sauvegardes en ligne dans le contenaire.")
-                elif not bkp_rotate:            # Si la saisie est vide, on applique la valeur par défaut et on affiche 'result'
-                    bkp_rotate = 7
-                    print("----------------\nNombre par défaut appliqué : "+ str(bkp_rotate))
-                    print("Les sauvegardes existantes depuis 7 jours et plus seront supprimées à chaque exécution de la sauvegarde.")
-                    break
-                elif bkp_rotate.isdigit() and bkp_rotate != "0":    # Si la saisie est bien un nombre entier positif différent de 0, affiche 'result'
-                    print(result)
-                    break
-                else:
-                    print("Les sauvegardes seront conservées indéfiniment.")
-                    break
+        while True:                     # Boucle tant que la saisie n'est pas nulle ou un nombre entier positif
+            bkp_rotate = input("----------------\nNombre de jours avant suppression des anciennes sauvegardes (défaut=7 | infini=0) (help): ")
+            result = "Les sauvegardes existantes depuis "+ str(bkp_rotate) + " jours et plus seront supprimées à chaque exécution de la sauvegarde."
+                             
+            if bkp_rotate== "help":     # Si saisie = help, affiche des explications
+                print("###########################\n|\t    AIDE\n|")
+                print("| ~~ Fonctionnement ~~\n|- Saisir un nombre entier >=0\n|- 0 = ne jamais effacer les sauvegardes\n|- Le calcul se base sur la date au moment de l'éxécution d'une sauvegarde.\n|")
+                print("| ~~ Exemple ~~\n|- Nombre choisi = '7'\n|- Une sauvegarde est planifiée tous les jours, à midi :")
+                print("|  --> Les sauvegardes en ligne depuis 7 jours et + (à la date d'éxécution) seront supprimées.")
+                print("|  --> Ici, il restera donc toujours 7 sauvegardes en ligne dans le contenaire.")
+                print("###########################")
+            elif not bkp_rotate:            # Si la saisie est vide, on applique la valeur par défaut et on affiche 'result'
+                bkp_rotate = 7
+                print("----------------\nNombre par défaut appliqué : "+ str(bkp_rotate))
+                print("Les sauvegardes existantes depuis 7 jours et plus seront supprimées à chaque exécution de la sauvegarde.")
+                break
+            elif bkp_rotate.isdigit() and bkp_rotate != "0":    # Si la saisie est bien un nombre entier positif différent de 0, affiche 'result'
+                print(result)
+                break
+            elif bkp_rotate == "0":
+                print("Les sauvegardes seront conservées indéfiniment.")
+                break
+            else:
+                continue
+        
+        while True:                     # Boucle tant que la saisie n'est pas nulle ou un nombre entier positif
+            log_rotate = input("----------------\nNombre de mois avant suppression des anciens log (défaut=12 | infini=0) (help): ")
+            result = "Les logs existants depuis "+ str(log_rotate) + " mois et plus seront supprimées à chaque exécution de la sauvegarde."
+                             
+            if log_rotate== "help":     # Si saisie = help, affiche des explications
+                print("###########################\n|\t    AIDE\n|")
+                print("| ~~ Fonctionnement ~~\n|- Saisir un nombre entier >=0\n|- 0 = ne jamais effacer les logs\n|- 3 fichiers log.txt sont créés par plan de sauvegarde et par mois")
+                print("|  --> (1 par opération effectuée sur le cloud (upload/download/del)) \n|")
+                print("| ~~ Exemple ~~\n|- Nombre choisi = '12'\n| (On considère que chaque type d'opération est éxécuté au moins 1 fois/mois (up/dl/del))")
+                print("|  --> Les logs existants depuis 12 mois et + (à la date d'éxécution d'une save) seront supprimés.")
+                print("|  --> Ici, dans 1 an, il restera donc 36 fichiers de logs pour ce plan (12 fichiers pour chacune des 3 opérations (up/dl/del)).")
+                print("###########################")
+            elif not log_rotate:            # Si la saisie est vide, on applique la valeur par défaut 
+                log_rotate = 12
+                print("----------------\nNombre par défaut appliqué : "+ str(log_rotate))
+                print("Les logs existants depuis 12 mois et plus seront supprimées à chaque exécution de la sauvegarde.")
+                break
+            elif log_rotate.isdigit() and log_rotate != "0":    # Si la saisie est bien un nombre entier positif différent de 0, affiche 'result'
+                print(result)
+                break
+            elif log_rotate == "0":
+                print("Les logs seront conservées indéfiniment.")
+                break
+            else:
+                continue
 
         cfg.set(file_conf, 'path_source', str(path_source))         # Création d'une clé dans la section qui définie la source locale à sauvegarder
         cfg.set(file_conf, 'bkp_rotate', str(bkp_rotate))           # Création d'une clé dans la section qui définie le nombre de sauvegardes à conserver en ligne
+        cfg.set(file_conf, 'log_rotate', str(log_rotate))           # Création d'une clé dans la section qui définie le nombre de logs à conserver
         cfg.write(open(file_path,'w'))                              # Saisie les entrées précédantes dans le fichier.cfg
         cloud_create_conf = 'create_' + choix_cloud.lower()         # Construction d'une variable selon le nom de la plateforme de cloud choisie
         
@@ -199,6 +265,7 @@ def execution (choix_user):
     global choix_plan
     global file_path
     global init_path
+    global path_log
     choix_plan = choix_user
 
     # Utilise la fonction 'listing_plan' pour valider le choix saisi en paramètre ou le corriger
@@ -210,8 +277,20 @@ def execution (choix_user):
     # Ouverture du fichier et inscription en variables des données à utiliser
     cfg.read(file_path)
     cloud_cible = cfg.get(choix_plan, 'cloud_cible')
-    fonction_save = "save_"+ cloud_cible.lower()
+    log_rotate = cfg.get(choix_plan, 'log_rotate')
+    list_log = os.listdir(path_log)                  # Créé une liste selon les fichiers contenus dans le dossier 'log'
+    fonction_save = "save_"+ cloud_cible.lower()     # Variable pour la construction d'appel de la fonction
 
+    MonthInDay = (int(log_rotate)*(365/12))          # Conversion des mois de 'log_rotate' en jours
+    
+    for files in list_log:                           # Pour chaque fichiers log de la liste
+        if files.startswith(choix_plan[0:-4]):                          # Si le fichier commence par le nom du plan
+            recup_date = files[-11:].replace('.txt', '')                # Récupère la date du fichier de log
+            convert_recup_date = datetime.strptime(recup_date, '%Y.%m') # Convertit la date d'upload (str) en vrai date
+            delta = datetime.now() - convert_recup_date                 # Calcul le delta entre la date actuelle et la date du fichier
+            if delta.days >= int(MonthInDay) and int(log_rotate) != 0:  # Si le nombre de jours du delta est supérieur ou = au nombre de jours définis et que =! 0 (pour conservation infini)
+                os.remove(path_log+"/"+files)
+    
     # Construction de l'appel de la fonction 'save_xxx' dans le sdk du cloud utilisé
     eval("package."+ cloud_cible +".sdk_"+ cloud_cible.lower() +"."+ fonction_save + '(file_path, choix_plan, init_path, path_log)')
 
@@ -291,9 +370,9 @@ def lancement(mode):
                     print("----------------\nRestauration du plan de sauvegarde '"+ choix_plan+"'\n")
                     restauration(choix_plan)
                     break
-                else: 
-                        restauration(choix_plan)
-                        break
+            else: 
+                restauration(choix_plan)
+                break
 
         elif args.action != None and args.action == "quit":
             print("----------------\nFermeture du script.")

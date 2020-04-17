@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-import os, uuid, configparser, unicodedata, re, sys
+import os, uuid, configparser, unicodedata, re, sys, time
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 from datetime import datetime, timedelta
 
@@ -146,6 +146,8 @@ class DirectoryClient:
     self.client.delete_blobs(*blobs)
 
 
+#############################
+#  Fonctions Personnalisées #
 
 def create_azure(file_conf, path_conf):
     """
@@ -160,23 +162,38 @@ def create_azure(file_conf, path_conf):
 
     # Demande les détails pour la sauvegarde Azure (Clé d'accès, nom du conteneur)
     while True:
-        connect_str = input("----------------\nEntrer la chaine de connexion (dans 'Clé d'accès' du menu 'Paramètres' du compte de stockage Azure) : ")
-        # Test la connexion pour savoir si la clé est valide
+      if not os.getenv('AZURE_STORAGE_CONNECTION_STRING'):
+        print("\n####################\n! ATTENTION !  Aucune variable d'environnement 'AZURE_STORAGE_CONNECTION_STRING' n'est détectée.")
+        print("- Veuillez vérifier cette variable d'environnement (voir prérequis du README).")
+        print("- Après avoir ajouté la variable d’environnement, redémarrez tous les programmes en cours d’exécution qui devront la lire.")
+        print("- Par exemple, redémarrez votre environnement de développement ou éditeur avant de continuer.\n####################")
+        sys.exit()
+      else:
+        # Test la connexion pour savoir si la clé est valide avec petite animation
         try: 
-            BlobServiceClient.from_connection_string(connect_str)
-            break
+          CONNECTION_STRING = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
+          BlobServiceClient.from_connection_string(CONNECTION_STRING)
+          print("----------------")
+          print("\nTest de connexion au compte Azure Storage en cours", end=" ")
+          for i in range(70):
+            if i%10==0:
+              time.sleep(.400)
+              print(".", end=" ", flush=True)
+          print("Réussi !\n")     
+          break
         except Exception as ex:
-            print('Erreur de connexion :')
-            print(ex)
+          print('Erreur de connexion :')
+          print(ex)
 
     while True:  # Boucle pour définir le nom du conteneur selon les restrictions éditées par Azure
         container_name =  input("----------------\nEntrer le nom du conteneur d'objet Blob Azure à créer/utiliser (help) : ") 
         if container_name == "help":    # Affiche l'aide selon les informations Azure
-            print("     ###########################\n                 AIDE\n     ###########################\n")
-            print("\n    - Le nom doit avoir entre 3 et 63 caractères.\n      - Ce nom peut contenir seulement des lettres MINUSCULES, des chiffres et des traits d'union.\n")
-            print("    - Il doit commencer par une lettre ou un chiffre.\n")
-            print("    - Chaque trait d'union doit être précédé et suivi d'un caractère autre qu'un trait d'union.\n")
-            print("    - Il doit terminer par une lettre ou un chiffre.\n")
+            print("###########################\n|\t    AIDE\n|")
+            print("| ~~ Prérequis Azure ~~\n|- Le nom doit avoir entre 3 et 63 caractères.\n| - Ce nom peut contenir seulement des lettres MINUSCULES, des chiffres et des traits d'union.")
+            print("|- Il doit commencer par une lettre ou un chiffre.")
+            print("|- Chaque trait d'union doit être précédé et suivi d'un caractère autre qu'un trait d'union.")
+            print("|- Il doit terminer par une lettre ou un chiffre.")
+            print("###########################")
         else:   
             # Sinon on essaie de nettoyer la saisie en supprimant les accents, les majuscules, les caractères spéciaux, les espaces...
             container_name_correct = unicodedata.normalize('NFKD', container_name)
@@ -213,7 +230,6 @@ def create_azure(file_conf, path_conf):
 
     # Ouverture du fichier.cgf cible, inscription des variables saisies dans des clés de la section principale, puis sauvegarde du fichier
     cfg.read(file_path)
-    cfg.set(file_conf, 'connect_str', str(connect_str))
     cfg.set(file_conf, 'container_name', str(container_name))
     cfg.write(open(file_path,'w'))
 
@@ -233,7 +249,7 @@ def save_azure(file_path, choix_plan, init_path, path_log):
         
         # Ouverture du fichier.cfg et stockage dans des variables pour les clés nécessaires
         cfg.read(file_path)
-        CONNECTION_STRING = cfg.get(choix_plan, 'connect_str') 
+        CONNECTION_STRING = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
         CONTAINER_NAME = cfg.get(choix_plan, 'container_name')
         path_source = cfg.get(choix_plan, 'path_source') 
         bkp_rotate = cfg.get(choix_plan, 'bkp_rotate')
@@ -262,14 +278,13 @@ def save_azure(file_path, choix_plan, init_path, path_log):
 
         # Construction d'une arborescence pour classer les save + Appel de la fonction d'upload + log dans un fichier txt, à la racine de la sauvegarde, le resultat
         client.upload(path_source, choix_plan+"/"+date_value)
-        blob_list = container_client.list_blobs(name_starts_with=(choix_plan+"/"+datetime.now().strftime('%Y-%m-%d-%Hh-%Mm')))
+        blob_list = container_client.list_blobs(name_starts_with=(choix_plan+"/"+date_value))
         for blob in blob_list:
-            with open(path_log+'/'+choix_plan+'-save.txt', 'a') as file:
-                file.write("\nFichier uploadé le "+datetime.now().strftime('%Y-%m-%d-%Hh-%Mm')+" : " + blob.name)
+            with open(path_log+'/'+choix_plan[0:-4]+'-upload-'+datetime.now().strftime('%Y.%m')+'.txt', 'a') as file: # Log l'upload dans un txt qui change de nom tout les mois
+                file.write("\nFichier uploadé : ---- " + blob.name)
     
         # Récupération des blobs en ligne sous l'arborescence commençant par 'choix_plan'
         blob_list = container_client.list_blobs(name_starts_with=(choix_plan+"/"))
-
         
         for blob in blob_list:                                                          # Pour chaque élément de la liste  
           if blob.name.startswith(choix_plan+"/") :                                     # Si l'élement est dans l'arbo du 'choix_plan'
@@ -278,8 +293,8 @@ def save_azure(file_path, choix_plan, init_path, path_log):
             delta = datetime.now() - convert_recup_date                                 # Calcul le delta entre la date actuelle et la date d'upload
             if delta.days >= int(bkp_rotate) and int(bkp_rotate) != 0:                  # Si l'écart de jours du delta est >= à la date de rotation choisie et diff de 0
               client.rm(blob.name)                                                      # Suppression de l'objet blob
-              with open(path_log+'/'+choix_plan+'-del.txt', 'a') as file:                  # Log la suppression dans un txt
-                file.write("\nFichier supprimé le "+datetime.now().strftime('%Y-%m-%d-%Hh-%Mm')+" : " + blob.name)
+              with open(path_log+'/'+choix_plan[0:-4]+'-delete-'+datetime.now().strftime('%Y.%m')+'.txt', 'a') as file: # Log la suppression dans un txt qui change de nom tout les mois
+                file.write("\nFichier supprimé le "+datetime.now().strftime('%Y-%m-%d-%Hh-%Mm')+" : ---- " + blob.name)
 
     
     except Exception as ex:
@@ -301,7 +316,7 @@ def restore_azure(file_path, choix_plan, init_path, path_log):
         
         # Ouverture du fichier.cfg et stockage dans des variables pour les clés nécessaires
         cfg.read(file_path)
-        CONNECTION_STRING = cfg.get(choix_plan, 'connect_str') 
+        CONNECTION_STRING = os.getenv('AZURE_STORAGE_CONNECTION_STRING') 
         CONTAINER_NAME = cfg.get(choix_plan, 'container_name')
         
         # Créer l'objet BlobServiceClient qui sera utilisé pour créer un client conteneur
@@ -314,12 +329,6 @@ def restore_azure(file_path, choix_plan, init_path, path_log):
         container_list = []
         for item in container_online:      
             container_list.append(item.name)
-        
-        if CONTAINER_NAME in container_list:    # Si le container existe déjà dans Azure, on continue le script
-            pass
-        else:   # Si le container n'existe pas on stop
-            print("Le contenaire "+CONTAINER_NAME+" n'existe pas en ligne.")
-            pass
 
         # Création d'objet pour utiliser la class et définir le contenaire
         client = DirectoryClient(CONNECTION_STRING, CONTAINER_NAME)
@@ -329,7 +338,18 @@ def restore_azure(file_path, choix_plan, init_path, path_log):
         blob_list = container_client.list_blobs(name_starts_with=(choix_plan+"/"))
 
         liste_date = []
-        print("Analyse des sauvegardes disponibles en cours...\n")
+        print("\nScan des contenaires et recherche des sauvegardes disponibles", end=" ")
+        for i in range(70):
+          if i%10==0:
+            time.sleep(.300)
+            print(".", end=" ", flush=True) 
+  
+        if CONTAINER_NAME in container_list:    # Si le container existe déjà dans Azure, on continue le script
+          pass
+        else:   # Si le container n'existe pas on stop
+            print("\n ! ATTENTION ! : Le contenaire '"+CONTAINER_NAME+"' n'existe pas en ligne.\n")
+            time.sleep(1)
+
         for blob in blob_list:   
                                                                  # Pour chaque élément de la liste  
           if blob.name.startswith(choix_plan+"/") :                                         # Si l'élement est dans l'arbo du 'choix_plan'
@@ -338,15 +358,16 @@ def restore_azure(file_path, choix_plan, init_path, path_log):
     
         while True:                     # Boucle tant que la saisie n'est pas nulle ou un nombre entier positif compris dans la liste
           for i, elt in enumerate(liste_date):
-            print("Choisir '{}' pour restaurer la sauvegarde du : '{}'.".format(i, elt))    # Enumère la liste avec ses indices pour créer des choix simple à saisir
+            print("\n-----------------\nChoisir '{}' pour restaurer la sauvegarde du : '{}'.".format(i, elt))  # Enumère la liste avec ses indices pour créer des choix simple à saisir
 
-          choix_restore = input("Choix (help) : ")    # Demande le choix du user
+          choix_restore = input("\nChoix (help) : ")    # Demande le choix du user
                                          
           if choix_restore== "help":     # Si saisie = help, affiche des explications
             print("###########################\n|\t    AIDE\n|")
-            print("| ~~ Fonctionnement ~~\n| - Saisir un nombre entier (>=0) et compris dans les choix proposés \n| - Chaque nombre correspond à une date de sauvegarde disponible à la restauration \n|")
+            print("| ~~ Fonctionnement ~~\n| - Saisir un nombre entier (>=0) compris dans les choix proposés.")
+            print("| - Chaque nombre correspond à une date de sauvegarde disponible pour une restauration.\n|")
             print("| ~~ Exemple ~~\n| - Nombre choisi = '0'")
-            print("|\t--> La sauvegarde en date du '"+liste_date[0]+"' sera restaurée.\n|")
+            print("|  --> La sauvegarde en date du '"+liste_date[0]+"' sera restaurée.\n|")
             print("###########################\n")
           elif not choix_restore:            # Si la saisie est vide, on boucle
             pass
@@ -361,7 +382,7 @@ def restore_azure(file_path, choix_plan, init_path, path_log):
                 print("| ~~ Fonctionnement ~~\n| - Saisir le chemin absolu du dossier local qui accueillera la restauration.\n| - La sauvegarde choisie y sera téléchargée.")
                 print("| - Les fichiers homonymes déjà présents dans le repertoire cible seront écrasés.\n| - Les repertoires seront conservés.\n|")
                 print("| ~~ Exemple ~~\n| - Chemin saisi : '/usr/local/bin/restauration'")
-                print("|\t--> Tous les sous-dossiers et fichiers contenus dans la sauvegarde Azure y seront téléchargés dans un dossier nommé '"+liste_date[int(choix_restore)]+"'.\n|")
+                print("|  --> Tous les sous-dossiers et fichiers contenus dans la sauvegarde Azure y seront téléchargés dans un dossier nommé '"+liste_date[int(choix_restore)]+"'.\n|")
                 print("###########################\n")
               elif not dir_restore:            # Si la saisie est vide, on applique la valeur par défaut et on affiche 'result'
                 print("Merci de saisir un chemin, la réponse ne peut-être vide.")
@@ -369,12 +390,12 @@ def restore_azure(file_path, choix_plan, init_path, path_log):
               else:
                 if os.path.isdir(dir_restore):  # Test si le repertoire cible existe
                   print("La sauvegarde sera restaurée dans : '"+ dir_restore +"/"+ liste_date[int(choix_restore)] +"'.")
-                  # Exécute la restauration et log le resultat dans un fichier txt 
+                  # Exécute la restauration et log le resultat dans un fichier txt
                   client.download(choix_plan+"/"+str(liste_date[int(choix_restore)]), dir_restore)
                   blob_list = container_client.list_blobs(name_starts_with=(choix_plan+"/"+liste_date[int(choix_restore)]))
-
                   for blob in blob_list:
-                    with open(path_log+'/'+choix_plan+'-restore.txt', 'a') as file:
+                    # Log dans un fichier qui change de nom tout les mois pour éviter un log trop gros
+                    with open(path_log+'/'+choix_plan[0:-4]+'-restor-'+datetime.now().strftime('%Y.%m')+'.txt', 'a') as file: 
                       file.write("\nFichier restauré le "+datetime.now().strftime('%Y-%m-%d-%Hh-%Mm')+" : " + blob.name)
                   break  
 
@@ -382,13 +403,13 @@ def restore_azure(file_path, choix_plan, init_path, path_log):
                   print("!! Attention, ce repertoire semble ne pas exister, si vous continuez, merci de le créer avant de continuer la restauration.")
                   try: 
                     alerte = input("Continuer ? (o/n) : ")
-                    if alerte == "o":
+                    if alerte == "o" or not alerte:
                       if os.path.isdir(dir_restore): # Test à nouveau si le repertoire existe
                         # Exécute la restauration et log le resultat dans un fichier txt 
                         client.download(choix_plan+"/"+str(liste_date[int(choix_restore)]), dir_restore)
                         blob_list = container_client.list_blobs(name_starts_with=(choix_plan+"/"+liste_date[int(choix_restore)]))
                         for blob in blob_list:
-                          with open(path_log+'/'+choix_plan+'-restore.txt', 'a') as file:
+                          with open(path_log+'/'+choix_plan+'-restor.txt', 'a') as file:
                             file.write("\nFichier restauré le "+datetime.now().strftime('%Y-%m-%d-%Hh-%Mm')+" : " + blob.name)
                         break  
 
