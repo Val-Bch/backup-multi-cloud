@@ -21,6 +21,7 @@ Est inclus ici le SDK Python 'Stockage Blob Azure v12' de Microsoft.
 - [Licence](#licence)
 - [Contribution](#contribution)
 
+------------------
 ## Prérequis
 
 - Microsoft ou Linux (Testé sous Debian, Ubuntu et Windows 10)
@@ -31,7 +32,7 @@ Est inclus ici le SDK Python 'Stockage Blob Azure v12' de Microsoft.
 - Une variable d'environnement (AZURE_STORAGE_CONNECTION_STRING) contenant votre chaine de connexion --> [Voir ici](https://docs.microsoft.com/fr-fr/azure/storage/blobs/storage-quickstart-blobs-python#configure-your-storage-connection-string)
 
 
-
+------------------
 ## Fonctionnalités principales
 
 * Guide pas à pas à chaque étape avec de l'aide disponible.
@@ -41,7 +42,7 @@ Est inclus ici le SDK Python 'Stockage Blob Azure v12' de Microsoft.
 * Restauration avec choix de la date selon les sauvegardes disponibles en ligne.
 
 
-
+------------------
 ## Lancement Rapide
 
 Tout d'abord, vérifiez les Prérequis ci-dessus.
@@ -57,12 +58,11 @@ Exemples :
 
 Laissez vous guider :) 
 
-
+------------------
 
 ## Lancement Avancé
-
+------------------
 ### Arguments 
--------------
 
 
 Le script backup-multi-cloud.py prend en charge la liste des arguments suivants :
@@ -85,16 +85,17 @@ Exemples :
  Cette commande (Linux) permettra d'assister pas à pas la création d'un nouveau plan de sauvegarde.
 
 
-
-###   Automatisation
 ------------------
+###   Automatisation
+
 
 Le script backup-multi-cloud.py a pour objectif d'être automatisé pour effectuer des sauvegardes.
 Pour ce faire, l'emplois de l'argument --quiet (-q) est obligatoire pour ne pas produire de sortie d'affichage (print).
 
 
-####  Crontab
 -------------
+####  Crontab
+
 
 Pour un système Linux utilisant Crontab voici des exemples de réglages.
 
@@ -105,9 +106,9 @@ Pour un système Linux utilisant Crontab voici des exemples de réglages.
 Si rien ne se produit, merci de consulter le fichier de log "/backup-multi-cloud/log/0-log-error.txt" pour comprendre l'origine de l'erreur.
 
 
+-----------------------
 
 ####  Tâches Planifiées
------------------------
 
 Pour un système Windows utilisant le Planificateur de Taches.
 
@@ -118,7 +119,7 @@ Sur la droite --> "Créer une tâche de base..."
 Se laisser guider pour les options et choisir "Démarrer un programme".
 Choisir le script "backup-multi-cloud.py" avec "Parcourir".
 Saisir les arguments dans la case prévue : "-q -a save -p Plan-Azure-demo.cfg"
-
+----------------------
 
 
 ##  Log
@@ -130,7 +131,7 @@ Il y a 4 types de logs.
 0-log-error.txt >> contient les lancements/sorties de script provocants des erreurs liées souvent à de mauvais réglages.
 Plan-Azure-nom-upload-YYYY.MM.txt >> 
 
-
+---------------------
 
 ##  Licence
 
