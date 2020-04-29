@@ -57,9 +57,9 @@ Est inclus ici le SDK Python 'Stockage Blob Azure v12' de Microsoft.
 
 4. Lancer le script avec Python. 
   Exemples : 
-    - Windows : ```C:/Python/Python38-32/python.exe c:/Git/backup-multi-cloud/backup-multi-cloud.py```
-    - Linux : ```./Git/backup-multi-cloud/backup-multi-cloud.py```  
-           ou ```python3 /Git/backup-multi-cloud/backup-multi-cloud.py```
+    - Windows : ```C:/Python38-32/python.exe c:/backup-multi-cloud/backup-multi-cloud.py```
+    - Linux : ```./backup-multi-cloud/backup-multi-cloud.py```  
+           ou ```python3 /backup-multi-cloud/backup-multi-cloud.py```
 
 5. Laissez vous guider :) 
 
@@ -85,9 +85,9 @@ Le script backup-multi-cloud.py prend en charge la liste des arguments suivants 
 |--verbose (-v)               | (par défaut)    | Force le print à s'activer                            |
 <br/>
 
-** Exemples : ** 
+*Exemples :* 
 
-```C:/Python/Python38-32/python.exe c:/Git/backup-multi-cloud/backup-multi-cloud.py -a save -p Plan-Azure-demo.cfg```<br/>
+```C:/Python38-32/python.exe c:/backup-multi-cloud/backup-multi-cloud.py -a save -p Plan-Azure-demo.cfg```<br/>
 Cette commande (Windows) effectuera une sauvegarde, en utilisant les paramètres du plan "Plan-Azure-demo.cfg".
 
 ```./backup-multi-cloud.py -a create```<br/>
@@ -99,7 +99,7 @@ Cette commande (Linux) permettra d'assister pas à pas la création d'un nouveau
 ##   Automatisation
 
 Le script backup-multi-cloud.py a pour objectif d'être automatisé pour effectuer des sauvegardes.
-Pour ce faire, l'emplois de l'argument --quiet (-q) est obligatoire pour ne pas produire de sortie d'affichage (print).
+Pour ce faire, l'emplois de l'argument ```--quiet (-q)``` est *obligatoire* pour ne pas produire de sortie d'affichage (print).
 <br/>
 
 -------------
@@ -109,7 +109,7 @@ Pour un système Linux utilisant Crontab voici des exemples de réglages.
 
 1. En root lancé `crontab -e`
 
-2. Saisir : ```05 2 * * * usr/local/bin/backup-multi-cloud/backup-multi-cloud.py -q -a save -p Plan-Azure-demo.cfg  >/dev/null 2>&1```  
+2. Saisir :  ```05 2 * * * usr/backup-multi-cloud/backup-multi-cloud.py -q -a save -p Plan-Azure-demo.cfg  >/dev/null 2>&1```  
 (Exécutera le script pour effectuer une sauvegarde tous les jours à 2h05) 
 
 3. Sauvegarder et quitter l'editeur choisi
@@ -145,7 +145,7 @@ Ces derniers sont contenus dans le sous-dossier "backup-multi-cloud//log"
 Il y a 4 types de logs.
 1. ```0-log-error.txt``` >> contient les lancements/sorties de script provocants des erreurs liées souvent à de mauvais réglages.
 
-2. ```Plan-Azure-nom-upload-YYYY.MM.txt``` >> contient la liste de tous les uploads réalisés sur le mois "MM"
+2. ```Plan-Azure-nom-upload-YYYY.MM.txt``` >> contient la liste de tous les uploads réalisés durant le mois "MM"
 
 3. ```Plan-Azure-nom-delete-YYYY.MM.txt``` >> contient la liste de tous les fichiers en lignes supprimés durant le mois "MM" (selon la rotation des sauvegardes paramétrée)
 
