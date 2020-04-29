@@ -8,18 +8,21 @@ Est inclus ici le SDK Python 'Stockage Blob Azure v12' de Microsoft.
 [![Python 3.7.3](https://badgen.net/badge/python/3.7.3)](https://www.python.org/downloads/release/python-373/)
 [![Platform tested](https://img.shields.io/badge/Plateform%20tested-Win--32%20%7C%20Win--64%20%7C%20Linux--64-orange)](#)
 [![Last commit](https://img.shields.io/github/last-commit/Val-Bch/backup-multi-cloud?label=Last%20Modified)](https://img.shields.io/github/last-commit/Val-Bch/backup-multi-cloud?label=Last%20Modified)
+<br/>
 
-## Table des matières
 ---------------------
+## Table des matières
+
 - [Prérequis](#Prérequis)
 - [Fonctionnalités principales](#Fonctionnalités-principales)
   - [Lancement Rapide](#lancement-Rapide)
   - [Lancement Avancé](#lancement-avancé)
     - [Arguments](#arguments)
-    - [Automatisation (Crontab/Tâches planifiée)](#automatisation)
+    - [Automatisation](#automatisation)
 - [Log](#les-fichiers-logs)
 - [Licence](#licence)
 - [Contribution](#contribution)
+<br/>
 
 ------------------
 ## Prérequis
@@ -30,7 +33,7 @@ Est inclus ici le SDK Python 'Stockage Blob Azure v12' de Microsoft.
 - Compte Azure avec un abonnement actif. [Créez un compte gratuitement](https://azure.microsoft.com/free/?ref=microsoft.com&utm_source=microsoft.com&utm_medium=docs&utm_campaign=visualstudio).
 - Un compte de stockage Azure (Blob pas DataLake). [Créer un compte de stockage](https://docs.microsoft.com/fr-fr/azure/storage/common/storage-account-create).
 - Une variable d'environnement (AZURE_STORAGE_CONNECTION_STRING) contenant votre chaine de connexion --> [Voir ici](https://docs.microsoft.com/fr-fr/azure/storage/blobs/storage-quickstart-blobs-python#configure-your-storage-connection-string)
-
+<br/>
 
 ------------------
 ## Fonctionnalités principales
@@ -40,23 +43,23 @@ Est inclus ici le SDK Python 'Stockage Blob Azure v12' de Microsoft.
 * Création d'un plan de sauvegarde, selon les SDK présentes.
 * Sauvegarde en ligne avec gestion des rotations (automatisable via Cron ou Planificateur Windows).
 * Restauration avec choix de la date selon les sauvegardes disponibles en ligne.
-
+<br/>
 
 ------------------
 ## Lancement Rapide
 
-Tout d'abord, vérifiez les Prérequis ci-dessus.
+ 1. Tout d'abord, vérifiez les Prérequis ci-dessus.
 
-Clonnez ensuite le dépot Github dans un dossier local. [Lien](https://github.com/Val-Bch/backup-multi-cloud.git)
+2. Clonnez ensuite le dépot Github dans un dossier local. [Lien](https://github.com/Val-Bch/backup-multi-cloud.git)
 
-Assurez vous que le script à bien le droit de s'éxécuter et qu'il à les droits R/W dans le repertoire où il se trouve.
+3. Assurez vous que le script à bien le droit de s'éxécuter et qu'il à les droits R/W dans le repertoire où il se trouve.
 
-Lancer le script avec Python. 
-Exemples : 
- - Windows : ```C:/Python/Python38-32/python.exe c:/Git/backup-multi-cloud/backup-multi-cloud.py```
- - Linux : ```./Git/backup-multi-cloud/backup-multi-cloud.py` ou `python3 /Git/backup-multi-cloud/backup-multi-cloud.py```
+4. Lancer le script avec Python. 
+  Exemples : 
+    - Windows : ```C:/Python/Python38-32/python.exe c:/Git/backup-multi-cloud/backup-multi-cloud.py```
+    - Linux : ```./Git/backup-multi-cloud/backup-multi-cloud.py` ou `python3 /Git/backup-multi-cloud/backup-multi-cloud.py```
 
-Laissez vous guider :) 
+5. Laissez vous guider :) 
 
 ------------------
 <br/>
@@ -67,6 +70,7 @@ Laissez vous guider :)
 
 
 Le script backup-multi-cloud.py prend en charge la liste des arguments suivants :
+<br/>
 
 | Argument                    | Option          | Fonction                                              |
 |-----------------------------|-----------------|-------------------------------------------------------|
@@ -76,30 +80,27 @@ Le script backup-multi-cloud.py prend en charge la liste des arguments suivants 
 |--plan (-p)                  | nomduplan.cfg   | Cible un plan existant                                |
 |--quiet (-q)                 |                 | Empèche le print de fonctionner                       |
 |--verbose (-v)               | (par défaut)    | Force le print à s'activer                            |
-
+<br/>
 
 Exemples :
 
- ```C:/Python/Python38-32/python.exe c:/Git/backup-multi-cloud/backup-multi-cloud.py -a save -p Plan-Azure-demo.cfg```
-
- Cette commande (Windows) effectuera une sauvegarde, en utilisant les paramètres du plan "Plan-Azure-demo.cfg".
+```C:/Python/Python38-32/python.exe c:/Git/backup-multi-cloud/backup-multi-cloud.py -a save -p Plan-Azure-demo.cfg```
+Cette commande (Windows) effectuera une sauvegarde, en utilisant les paramètres du plan "Plan-Azure-demo.cfg".
 
 ```./backup-multi-cloud.py -a create```
-
- Cette commande (Linux) permettra d'assister pas à pas la création d'un nouveau plan de sauvegarde.
-
+Cette commande (Linux) permettra d'assister pas à pas la création d'un nouveau plan de sauvegarde.
 
 ------------------
-###   Automatisation
+<br/>
 
+###   Automatisation
 
 Le script backup-multi-cloud.py a pour objectif d'être automatisé pour effectuer des sauvegardes.
 Pour ce faire, l'emplois de l'argument --quiet (-q) est obligatoire pour ne pas produire de sortie d'affichage (print).
-
+<br/>
 
 -------------
 #### -- Crontab
-
 
 Pour un système Linux utilisant Crontab voici des exemples de réglages.
 
@@ -110,7 +111,6 @@ Pour un système Linux utilisant Crontab voici des exemples de réglages.
 (Exécutera le script pour effectuer une sauvegarde tous les jours à 2h05) 
 
 Si rien ne se produit, merci de consulter le fichier de log "/backup-multi-cloud/log/0-log-error.txt" pour comprendre l'origine de l'erreur.
-
 
 -----------------------
 
@@ -127,6 +127,7 @@ Choisir le script "backup-multi-cloud.py" avec "Parcourir".
 Saisir les arguments dans la case prévue : ```-q -a save -p Plan-Azure-demo.cfg```
 
 ----------------------
+<br/>
 
 ##  Log
 
@@ -138,6 +139,7 @@ Il y a 4 types de logs.
 Plan-Azure-nom-upload-YYYY.MM.txt >> 
 
 ---------------------
+<br/>
 
 ##  Licence
 
