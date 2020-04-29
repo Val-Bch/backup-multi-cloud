@@ -53,12 +53,13 @@ Assurez vous que le script à bien le droit de s'éxécuter et qu'il à les droi
 
 Lancer le script avec Python. 
 Exemples : 
- - Windows : `C:/Python/Python38-32/python.exe c:/Git/backup-multi-cloud/backup-multi-cloud.py`
- - Linux : `./Git/backup-multi-cloud/backup-multi-cloud.py` ou `python3 /Git/backup-multi-cloud/backup-multi-cloud.py`
+ - Windows : ```C:/Python/Python38-32/python.exe c:/Git/backup-multi-cloud/backup-multi-cloud.py```
+ - Linux : ```./Git/backup-multi-cloud/backup-multi-cloud.py` ou `python3 /Git/backup-multi-cloud/backup-multi-cloud.py```
 
 Laissez vous guider :) 
 
 ------------------
+<br/>
 
 ## Lancement Avancé
 
@@ -77,11 +78,14 @@ Le script backup-multi-cloud.py prend en charge la liste des arguments suivants 
 |--verbose (-v)               | (par défaut)    | Force le print à s'activer                            |
 
 
-Exemples : 
- `C:/Python/Python38-32/python.exe c:/Git/backup-multi-cloud/backup-multi-cloud.py -a save -p Plan-Azure-demo.cfg`
+Exemples :
+
+ ```C:/Python/Python38-32/python.exe c:/Git/backup-multi-cloud/backup-multi-cloud.py -a save -p Plan-Azure-demo.cfg```
+
  Cette commande (Windows) effectuera une sauvegarde, en utilisant les paramètres du plan "Plan-Azure-demo.cfg".
 
-`./backup-multi-cloud.py -a create`
+```./backup-multi-cloud.py -a create```
+
  Cette commande (Linux) permettra d'assister pas à pas la création d'un nouveau plan de sauvegarde.
 
 
@@ -100,7 +104,9 @@ Pour ce faire, l'emplois de l'argument --quiet (-q) est obligatoire pour ne pas 
 Pour un système Linux utilisant Crontab voici des exemples de réglages.
 
 - En root lancé crontab -e puis saisir :
-`05 2 * * * usr/local/bin/backup-multi-cloud/backup-multi-cloud.py -q -a save -p Plan-Azure-demo.cfg  >/dev/null 2>&1`
+
+```05 2 * * * usr/local/bin/backup-multi-cloud/backup-multi-cloud.py -q -a save -p Plan-Azure-demo.cfg  >/dev/null 2>&1```
+
 (Exécutera le script pour effectuer une sauvegarde tous les jours à 2h05) 
 
 Si rien ne se produit, merci de consulter le fichier de log "/backup-multi-cloud/log/0-log-error.txt" pour comprendre l'origine de l'erreur.
@@ -118,7 +124,7 @@ Saisir "Taskschd.msc" et valider.
 Sur la droite --> "Créer une tâche de base..."
 Se laisser guider pour les options et choisir "Démarrer un programme".
 Choisir le script "backup-multi-cloud.py" avec "Parcourir".
-Saisir les arguments dans la case prévue : "-q -a save -p Plan-Azure-demo.cfg"
+Saisir les arguments dans la case prévue : ```-q -a save -p Plan-Azure-demo.cfg```
 
 ----------------------
 
