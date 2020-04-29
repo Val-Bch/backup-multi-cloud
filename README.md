@@ -61,7 +61,7 @@ Laissez vous guider :)
 ------------------
 
 ## Lancement Avancé
-------------------
+
 ### Arguments 
 
 
@@ -94,7 +94,7 @@ Pour ce faire, l'emplois de l'argument --quiet (-q) est obligatoire pour ne pas 
 
 
 -------------
-####  Crontab
+#### -- Crontab
 
 
 Pour un système Linux utilisant Crontab voici des exemples de réglages.
@@ -108,7 +108,7 @@ Si rien ne se produit, merci de consulter le fichier de log "/backup-multi-cloud
 
 -----------------------
 
-####  Tâches Planifiées
+#### -- Tâches Planifiées
 
 Pour un système Windows utilisant le Planificateur de Taches.
 
@@ -119,8 +119,8 @@ Sur la droite --> "Créer une tâche de base..."
 Se laisser guider pour les options et choisir "Démarrer un programme".
 Choisir le script "backup-multi-cloud.py" avec "Parcourir".
 Saisir les arguments dans la case prévue : "-q -a save -p Plan-Azure-demo.cfg"
-----------------------
 
+----------------------
 
 ##  Log
 
@@ -136,5 +136,6 @@ Plan-Azure-nom-upload-YYYY.MM.txt >>
 ##  Licence
 
  <p><a href="https://github.com/Val-Bch/backup-multi-cloud/blob/master/LICENSE">
- <img width=6% src="https://www.gnu.org/graphics/gplv3-or-later.svg">backup-multi-cloud.py et sdk_azure.py est sous licence GNU General Public License v3.0 
+ <img width=6% src="https://www.gnu.org/graphics/gplv3-or-later.svg"/>
+ "backup-multi-cloud.py" et "sdk_azure.py" sont sous licence GNU General Public License v3.0 
  </a></p>
