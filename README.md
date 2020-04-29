@@ -1,13 +1,14 @@
-Ce script permet d'assister à la création, de faciliter et d'automatiser des plans de sauvegardes vers des stokages Cloud comme Azure Blob Storage.
-Il est évolutif et vous permet d'intégrer des SDK Python sous forme de 'packages'. 
-Est inclus ici le SDK Python 'Stockage Blob Azure v12' de Microsoft.
-<br/>
-
----------------------
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 [![Python 3.7.3](https://badgen.net/badge/python/3.7.3)](https://www.python.org/downloads/release/python-373/)
 [![Platform tested](https://img.shields.io/badge/Plateform%20tested-Win--32%20%7C%20Win--64%20%7C%20Linux--64-orange)](#)
 [![Last commit](https://img.shields.io/github/last-commit/Val-Bch/backup-multi-cloud?label=Last%20Modified)](https://img.shields.io/github/last-commit/Val-Bch/backup-multi-cloud?label=Last%20Modified)
+
+
+---------------------
+
+Ce script permet d'assister à la création, de faciliter et d'automatiser des plans de sauvegardes vers des stokages Cloud comme Azure Blob Storage.
+Il est évolutif et vous permet d'intégrer des SDK Python sous forme de 'packages'. 
+Est inclus ici le SDK Python 'Stockage Blob Azure v12' de Microsoft.
 <br/>
 
 ---------------------
@@ -18,7 +19,7 @@ Est inclus ici le SDK Python 'Stockage Blob Azure v12' de Microsoft.
   - [Lancement Rapide](#lancement-Rapide)
   - [Lancement Avancé](#lancement-avancé)
     - [Arguments](#arguments)
-    - [Automatisation (Crontab/Tâches planifiée)](#automatisation)
+    - [Automatisation](#automatisation)
 - [Log](#les-fichiers-logs)
 - [Licence](#licence)
 - [Contribution](#contribution)
@@ -85,11 +86,12 @@ Le script backup-multi-cloud.py prend en charge la liste des arguments suivants 
 
 Exemples :
 
-```C:/Python/Python38-32/python.exe c:/Git/backup-multi-cloud/backup-multi-cloud.py -a save -p Plan-Azure-demo.cfg```
+```C:/Python/Python38-32/python.exe c:/Git/backup-multi-cloud/backup-multi-cloud.py -a save -p Plan-Azure-demo.cfg```<br/>
 Cette commande (Windows) effectuera une sauvegarde, en utilisant les paramètres du plan "Plan-Azure-demo.cfg".
 
-```./backup-multi-cloud.py -a create```
+```./backup-multi-cloud.py -a create```<br/>
 Cette commande (Linux) permettra d'assister pas à pas la création d'un nouveau plan de sauvegarde.
+<br/>
 <br/>
 
 ------------------
@@ -118,13 +120,13 @@ Si rien ne se produit, merci de consulter le fichier de log "/backup-multi-cloud
 
 Pour un système Windows utilisant le Planificateur de Taches.
 
-Au clavier appuyer sur les touches "Windows + R" pour ouvrir "Exécuter".
-Saisir "Taskschd.msc" et valider.
-
-Sur la droite --> "Créer une tâche de base..."
-Se laisser guider pour les options et choisir "Démarrer un programme".
-Choisir le script "backup-multi-cloud.py" avec "Parcourir".
-Saisir les arguments dans la case prévue : ```-q -a save -p Plan-Azure-demo.cfg```
+1. Au clavier appuyer sur les touches "Windows + R" pour ouvrir "Exécuter".
+2. Saisir "Taskschd.msc" et valider.
+3. Sur la droite --> "Créer une tâche de base..."
+4. Se laisser guider pour les options et choisir "Démarrer un programme".
+5. Choisir le script "backup-multi-cloud.py" avec "Parcourir".
+6. Saisir les arguments dans la case prévue : ```-q -a save -p Plan-Azure-demo.cfg```
+<br/>
 <br/>
 
 ----------------------
