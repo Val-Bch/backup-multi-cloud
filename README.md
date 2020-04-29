@@ -1,8 +1,7 @@
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+~ ~ ~ ~ ~ ~ ~ [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 [![Python 3.7.3](https://badgen.net/badge/python/3.7.3)](https://www.python.org/downloads/release/python-373/)
 [![Platform tested](https://img.shields.io/badge/Plateform%20tested-Win--32%20%7C%20Win--64%20%7C%20Linux--64-orange)](#)
-[![Last commit](https://img.shields.io/github/last-commit/Val-Bch/backup-multi-cloud?label=Last%20Modified)](https://img.shields.io/github/last-commit/Val-Bch/backup-multi-cloud?label=Last%20Modified)
-
+[![Last commit](https://img.shields.io/github/last-commit/Val-Bch/backup-multi-cloud?label=Last%20Modified)](https://img.shields.io/github/last-commit/Val-Bch/backup-multi-cloud?label=Last%20Modified) ~ ~ ~ ~ ~ ~ ~
 
 
 ---------------------
@@ -13,7 +12,7 @@ Est inclus ici le SDK Python 'Stockage Blob Azure v12' de Microsoft.
 <br/>
 
 ---------------------
-## Table des matières
+# Table des matières
 
 - [Prérequis](#Prérequis)
 - [Fonctionnalités principales](#Fonctionnalités-principales)
@@ -27,7 +26,7 @@ Est inclus ici le SDK Python 'Stockage Blob Azure v12' de Microsoft.
 <br/>
 
 ------------------
-## Prérequis
+# Prérequis
 
 - Microsoft ou Linux (Testé sous Debian, Ubuntu et Windows 10)
 - Python 3 ou >
@@ -38,7 +37,7 @@ Est inclus ici le SDK Python 'Stockage Blob Azure v12' de Microsoft.
 <br/>
 
 ------------------
-## Fonctionnalités principales
+# Fonctionnalités principales
 
 * Guide pas à pas à chaque étape avec de l'aide disponible.
 * Script écrit de manière à anticiper/détecter/corriger les erreurs.
@@ -48,7 +47,7 @@ Est inclus ici le SDK Python 'Stockage Blob Azure v12' de Microsoft.
 <br/>
 
 ------------------
-## Lancement Rapide
+# Lancement Rapide
 
  1. Tout d'abord, vérifiez les Prérequis ci-dessus.
 
@@ -67,9 +66,9 @@ Est inclus ici le SDK Python 'Stockage Blob Azure v12' de Microsoft.
 ------------------
 <br/>
 
-## Lancement Avancé
+# Lancement Avancé
 
-### Arguments 
+## Arguments 
 
 
 Le script backup-multi-cloud.py prend en charge la liste des arguments suivants :
@@ -97,14 +96,14 @@ Cette commande (Linux) permettra d'assister pas à pas la création d'un nouveau
 <br/>
 
 ------------------
-###   Automatisation
+##   Automatisation
 
 Le script backup-multi-cloud.py a pour objectif d'être automatisé pour effectuer des sauvegardes.
 Pour ce faire, l'emplois de l'argument --quiet (-q) est obligatoire pour ne pas produire de sortie d'affichage (print).
 <br/>
 
 -------------
-#### -- Crontab
+### -- Crontab
 
 Pour un système Linux utilisant Crontab voici des exemples de réglages.
 
@@ -118,7 +117,7 @@ Si rien ne se produit, merci de consulter le fichier de log "/backup-multi-cloud
 <br/>
 
 -----------------------
-#### -- Tâches Planifiées
+### -- Tâches Planifiées
 
 Pour un système Windows utilisant le Planificateur de Taches.
 
@@ -132,7 +131,7 @@ Pour un système Windows utilisant le Planificateur de Taches.
 <br/>
 
 ----------------------
-##  Log
+#  Log
 
 Le script est multi plateforme (Windows/Linux) et utilise ses propres fichiers de logs.
 Ces derniers sont contenus dans le sous-dossier "backup-multi-cloud//log" 
@@ -143,7 +142,7 @@ Plan-Azure-nom-upload-YYYY.MM.txt >>
 <br/>
 
 ---------------------
-##  Licence
+#  Licence
 
  <p><a href="https://github.com/Val-Bch/backup-multi-cloud/blob/master/LICENSE">
  <img width=6% src="https://www.gnu.org/graphics/gplv3-or-later.svg"/>
