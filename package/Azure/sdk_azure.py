@@ -149,7 +149,7 @@ class DirectoryClient:
 #############################
 #  Fonctions Personnalisées #
 
-def create_azure(file_conf, path_conf):
+def create_azure(file_conf, path_conf, path_log):
     """
     Fonction appelée par le script principal pour la création d'un plan de sauvegarde avec Azure Storage Blob.\n
     Met à jour le fichier.cfg avec les particularités de connexions liées à cette plateforme Cloud (ici la variable 'connect-str' qui contient la chaine de connexion Azure).\n
@@ -184,6 +184,8 @@ def create_azure(file_conf, path_conf):
         except Exception as ex:
           print('Erreur de connexion :')
           print(ex)
+          with open(path_log+'/0-log-error.txt', 'a') as file:
+            file.write("\n"+datetime.now().strftime('%Y-%m-%d-%Hh-%Mm')+" : Erreur de connexion = '"+ex+"'" )
 
     while True:  # Boucle pour définir le nom du conteneur selon les restrictions éditées par Azure
         container_name =  input("----------------\nEntrer le nom du conteneur d'objet Blob Azure à créer/utiliser (help) : ") 
@@ -226,6 +228,8 @@ def create_azure(file_conf, path_conf):
                     except Exception as ex:
                         print('Exception:')
                         print(ex)
+                        with open(path_log+'/0-log-error.txt', 'a') as file:
+                          file.write("\n"+datetime.now().strftime('%Y-%m-%d-%Hh-%Mm')+" : ERREUR = '"+ex+"'" )
 
 
     # Ouverture du fichier.cgf cible, inscription des variables saisies dans des clés de la section principale, puis sauvegarde du fichier
@@ -300,6 +304,8 @@ def save_azure(file_path, choix_plan, init_path, path_log):
     except Exception as ex:
         print('Exception:')
         print(ex)
+        with open(path_log+'/0-log-error.txt', 'a') as file:
+          file.write("\n"+datetime.now().strftime('%Y-%m-%d-%Hh-%Mm')+" : ERREUR = '"+ex+"'" )
 
 
 def restore_azure(file_path, choix_plan, init_path, path_log):
@@ -423,6 +429,8 @@ def restore_azure(file_path, choix_plan, init_path, path_log):
                   except Exception as ex:
                     print('Exception:')
                     print(ex)
+                    with open(path_log+'/0-log-error.txt', 'a') as file:
+                      file.write("\n"+datetime.now().strftime('%Y-%m-%d-%Hh-%Mm')+" : ERREUR = '"+ex+"'")
             break
           else:
             pass
@@ -430,3 +438,6 @@ def restore_azure(file_path, choix_plan, init_path, path_log):
     except Exception as ex:
         print('Exception:')
         print(ex)
+        with open(path_log+'/0-log-error.txt', 'a') as file:
+          file.write("\n"+datetime.now().strftime('%Y-%m-%d-%Hh-%Mm')+" : ERREUR = '"+ex+"'")
+                    

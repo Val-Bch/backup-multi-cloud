@@ -20,7 +20,6 @@ except: # Stop le script si manquant avec une explication
 ##################################################################################
 #   Gestion du lancement, de l'aide, et des arguments optionnels et positionnels #
 
-#syslog.syslog('Processing started')
 parser = argparse.ArgumentParser(description="Sauvegarde/restauration multi Cloud")
 group = parser.add_mutually_exclusive_group()
 group.add_argument("-v", "--verbose", action="store_true")
@@ -190,6 +189,8 @@ def creation():
                     except Exception as ex:
                         print('Exception:')
                         print(ex)
+                        with open(path_log+'/0-log-error.txt', 'a') as file:
+                            file.write("\n"+datetime.now().strftime('%Y-%m-%d-%Hh-%Mm')+" : ERREUR = '"+ex+"'" )
             
         while True:                     # Boucle tant que la saisie n'est pas nulle ou un nombre entier positif
             bkp_rotate = input("----------------\nNombre de jours avant suppression des anciennes sauvegardes (défaut=7 | infini=0) (help): ")
@@ -249,7 +250,7 @@ def creation():
         cloud_create_conf = 'create_' + choix_cloud.lower()         # Construction d'une variable selon le nom de la plateforme de cloud choisie
         
         # Appel la fonction définie dans les packages selon les choix établis
-        eval("package."+ choix_cloud +".sdk_"+ choix_cloud.lower() +"."+ cloud_create_conf + '(file_conf, path_conf)')
+        eval("package."+ choix_cloud +".sdk_"+ choix_cloud.lower() +"."+ cloud_create_conf + '(file_conf, path_conf, path_log)')
         break
         
 
@@ -350,16 +351,18 @@ def lancement(mode):
                     break
                 else:
                     if args.quiet is True:          # Si l'argument quiet a été saisie et que l'argument --plan est invalide, on stop avec un log erreur (adapté au Cron par exemple)
-                        enablePrint()
-                        print("syslog.syslog(syslog.LOG_ERR, 'Argument --plan (-p) invalide, fermeture du script.')")
+                        with open(path_log+'/0-log-error.txt', 'a') as file:
+                            file.write("\n"+datetime.now().strftime('%Y-%m-%d-%Hh-%Mm')+" : Erreur = 'Argument --plan (-p) invalide, la cible n'existe pas. Fermeture du script.'" )
                         break
                     else: 
                         execution(choix_plan)
                         break
             else:
-                if args.quiet is True or args.quiet is False:          # Sinon quelque soit l'état de quiet et que l'argument --plan est absent, on force le print + message dans les log pour les Cron
+                if args.quiet is True or args.quiet is False:   # Sinon quelque soit l'état de quiet et que l'argument --plan est absent, on force le print + message dans les log pour les Cron
                     enablePrint()
-                    print("syslog.syslog(syslog.LOG_ERR, 'Argument --plan (-p) invalide.')")
+                    print("ERREUR = 'Argument --plan (-p) invalide.'")
+                    with open(path_log+'/0-log-error.txt', 'a') as file:
+                        file.write("\n"+datetime.now().strftime('%Y-%m-%d-%Hh-%Mm')+" : ERREUR = ' Mode Quiet activé + Argument --plan (-p) absent/invalide. \n\t\t\t\tLe script passe en mode verbose auto pour continuer une éxécution manuelle. \n\t\t\t\tSi l'éxécution provient d'une tâche planifiée, celle-ci ne s'est pas éxécutée correctement.'" )
                     execution(choix_plan)
                     break
 
