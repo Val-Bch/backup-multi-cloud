@@ -1,9 +1,9 @@
 Ce script permet d'assister à la création, de faciliter et d'automatiser des plans de sauvegardes vers des stokages Cloud comme Azure Blob Storage.
 Il est évolutif et vous permet d'intégrer des SDK Python sous forme de 'packages'. 
 Est inclus ici le SDK Python 'Stockage Blob Azure v12' de Microsoft.
+<br/>
 
-
-
+---------------------
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 [![Python 3.7.3](https://badgen.net/badge/python/3.7.3)](https://www.python.org/downloads/release/python-373/)
 [![Platform tested](https://img.shields.io/badge/Plateform%20tested-Win--32%20%7C%20Win--64%20%7C%20Linux--64-orange)](#)
@@ -18,7 +18,7 @@ Est inclus ici le SDK Python 'Stockage Blob Azure v12' de Microsoft.
   - [Lancement Rapide](#lancement-Rapide)
   - [Lancement Avancé](#lancement-avancé)
     - [Arguments](#arguments)
-    - [Automatisation](#automatisation)
+    - [Automatisation (Crontab/Tâches planifiée)](#automatisation)
 - [Log](#les-fichiers-logs)
 - [Licence](#licence)
 - [Contribution](#contribution)
@@ -57,7 +57,8 @@ Est inclus ici le SDK Python 'Stockage Blob Azure v12' de Microsoft.
 4. Lancer le script avec Python. 
   Exemples : 
     - Windows : ```C:/Python/Python38-32/python.exe c:/Git/backup-multi-cloud/backup-multi-cloud.py```
-    - Linux : ```./Git/backup-multi-cloud/backup-multi-cloud.py` ou `python3 /Git/backup-multi-cloud/backup-multi-cloud.py```
+    - Linux : ```./Git/backup-multi-cloud/backup-multi-cloud.py```
+           ou ```python3 /Git/backup-multi-cloud/backup-multi-cloud.py```
 
 5. Laissez vous guider :) 
 
@@ -89,10 +90,9 @@ Cette commande (Windows) effectuera une sauvegarde, en utilisant les paramètres
 
 ```./backup-multi-cloud.py -a create```
 Cette commande (Linux) permettra d'assister pas à pas la création d'un nouveau plan de sauvegarde.
-
-------------------
 <br/>
 
+------------------
 ###   Automatisation
 
 Le script backup-multi-cloud.py a pour objectif d'être automatisé pour effectuer des sauvegardes.
@@ -111,9 +111,9 @@ Pour un système Linux utilisant Crontab voici des exemples de réglages.
 (Exécutera le script pour effectuer une sauvegarde tous les jours à 2h05) 
 
 Si rien ne se produit, merci de consulter le fichier de log "/backup-multi-cloud/log/0-log-error.txt" pour comprendre l'origine de l'erreur.
+<br/>
 
 -----------------------
-
 #### -- Tâches Planifiées
 
 Pour un système Windows utilisant le Planificateur de Taches.
@@ -125,10 +125,9 @@ Sur la droite --> "Créer une tâche de base..."
 Se laisser guider pour les options et choisir "Démarrer un programme".
 Choisir le script "backup-multi-cloud.py" avec "Parcourir".
 Saisir les arguments dans la case prévue : ```-q -a save -p Plan-Azure-demo.cfg```
-
-----------------------
 <br/>
 
+----------------------
 ##  Log
 
 Le script est multi plateforme (Windows/Linux) et utilise ses propres fichiers de logs.
@@ -137,10 +136,9 @@ Ces derniers sont contenus dans le sous-dossier "backup-multi-cloud//log"
 Il y a 4 types de logs.
 0-log-error.txt >> contient les lancements/sorties de script provocants des erreurs liées souvent à de mauvais réglages.
 Plan-Azure-nom-upload-YYYY.MM.txt >> 
-
----------------------
 <br/>
 
+---------------------
 ##  Licence
 
  <p><a href="https://github.com/Val-Bch/backup-multi-cloud/blob/master/LICENSE">
