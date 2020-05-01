@@ -141,21 +141,9 @@ Pour un système Windows utilisant le Planificateur de Taches.
 ##  Ajouter un SDK
 <br/>
 <br/>
-Pour ajouter un nouveau SDK Python pour cibler un autre cloud, il convient de respecter ces conditions : 
-
-1. Créer un sous-dossier comportant le nom du Cloud dans le dossier ```package``` (Ex : pour AWS --> ```/package/AWS/```)
-
-2. Placer dedans le fichier.py du SDK en respectant cette syntaxe : ```sdk_xxxx.py``` (Ex : pour AWS --> ```/package/AWS/sdk_aws.py```)
-
-3. Ajouter les 3 fonctions suivantes dans le fichier ```sdk_xxxx.py``` : 
-  - ```def create_azure(file_conf, path_conf, path_log):```
-  - ```def save_azure(file_path, choix_plan, init_path, path_log):```
-  - ```def restore_azure(file_path, choix_plan, init_path, path_log):```
-
-4. La fonction create : 
-  - Permet d'ajouter au fichier de configuration du plan (Ex : Plan-AWS-demo.cfg) les particularités de connexions et d'utilisation du Cloud ciblé.  
-  Pour Azure par exemple, il est recommandé d'utiliser une variable d'environnement nommée "AZURE_STORAGE_CONNECTION_STRING" et les conteneurs doivent respecter certains critères de nommage.
-
+Voir le détail dans [le fichier contributing.md].(https://github.com/Val-Bch/backup-multi-cloud/blob/master/contributing.md)
+<br/>
+<br/>
 
 ----------------------
 #  Log
@@ -170,6 +158,7 @@ Il y a 4 types de logs.
 3. ```Plan-Azure-nom-delete-YYYY.MM.txt``` >> contient la liste de tous les fichiers en lignes supprimés durant le mois "MM" (selon la rotation des sauvegardes paramétrée)
 
 4. ```Plan-Azure-nom-restore-YYYY.MM.txt``` >> contient la liste de tous les fichiers restaurés durant le mois "MM"
+<br/>
 <br/>
 
 ---------------------
