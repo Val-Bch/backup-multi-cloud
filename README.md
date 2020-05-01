@@ -163,7 +163,7 @@ Il y a 4 types de logs.
 <br/>
 
 ---------------------
-#  Contributing
+#  Contribution
 <br />
 
 Pour contribuer à améliorer ou corriger ce projet, merci de vous référez au [fichier contributing.md](https://github.com/Val-Bch/backup-multi-cloud/blob/master/contributing.md).
