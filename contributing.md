@@ -32,20 +32,20 @@ Pour ajouter un nouveau SDK Python afin de cibler un autre cloud, il convient de
 2. Placer dedans le fichier.py du SDK en respectant cette syntaxe : ```sdk_xxxx.py``` (Ex : pour AWS --> ```/package/AWS/sdk_aws.py```)
 
 3. Ajouter les 3 fonctions suivantes dans le fichier ```sdk_xxxx.py``` où ```xxxx``` est le nom du cloud : 
-  - ```def create_xxxx(file_conf, path_conf, path_log):```
-  - ```def save_xxxx(file_path, choix_plan, init_path, path_log):```
-  - ```def restore_xxxx(file_path, choix_plan, init_path, path_log):```
+    - ```def create_xxxx(file_conf, path_conf, path_log):```
+    - ```def save_xxxx(file_path, choix_plan, init_path, path_log):```
+    - ```def restore_xxxx(file_path, choix_plan, init_path, path_log):```
 
-  1. La fonction create : 
-    - Permet d'ajouter au fichier de configuration du plan (Ex : Plan-AWS-demo.cfg) les particularités de connexions et d'utilisation du Cloud ciblé.  
-      Pour Azure par exemple, il est recommandé d'utiliser une variable d'environnement nommée "AZURE_STORAGE_CONNECTION_STRING" qui contient la chaine de connexion au compte et les conteneurs doivent respecter certains critères de nommage.
+    +. La fonction create :  
+      - Permet d'ajouter au fichier de configuration du plan (Ex : Plan-AWS-demo.cfg) les particularités de connexions et d'utilisation du Cloud ciblé.  
+        Pour Azure par exemple, il est recommandé d'utiliser une variable d'environnement nommée "AZURE_STORAGE_CONNECTION_STRING" qui contient la chaine de connexion au compte et les conteneurs doivent respecter certains critères de nommage.
       
-  2. La fonction save : 
-    - Permet d'éxécuter une sauvegarde. Celà comprend les particularités d'usage du SDK du Cloud ciblé, la gestion des rotations de sauvegardes, et le log dans un fichier.txt.  
-    Il faut s'appuyer sur les fonctions d'upload et de suppression en ligne du SDK.
+    +. La fonction save :  
+      - Permet d'éxécuter une sauvegarde. Celà comprend les particularités d'usage du SDK du Cloud ciblé, la gestion des rotations de sauvegardes, et le log dans un fichier.txt.  
+      Il faut s'appuyer sur les fonctions d'upload et de suppression en ligne du SDK.
 
-  3. La fonction restore : 
-    - Permet de lister les sauvegardes présentent en ligne et de proposer d'en choisir une a restaurer puis de logger le résultat.  
-    Il faut s'appuyer sur une fonction de listage et une fonction de download du SDK.
+    +. La fonction restore :  
+      - Permet de lister les sauvegardes présentent en ligne et de proposer d'en choisir une a restaurer puis de logger le résultat.  
+      Il faut s'appuyer sur une fonction de listage et une fonction de download du SDK.
 
 4. Adapter les paramètres requis par le SDK en fonction des paramètres transmis à l'appel des fonctions create, save et restore.
