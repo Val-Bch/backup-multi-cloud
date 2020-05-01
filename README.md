@@ -22,8 +22,9 @@ Est inclus ici le SDK Python 'Stockage Blob Azure v12' de Microsoft.
     - [Automatisation](#automatisation)
   - [Ajouter un SDK](#Ajouter-un-SDK)
 - [Log](#les-fichiers-logs)
-- [Licence](#licence)
 - [Contribution](#contribution)
+- [Licence](#licence)
+
 <br/>
 
 ------------------
@@ -158,6 +159,14 @@ Il y a 4 types de logs.
 3. ```Plan-Azure-nom-delete-YYYY.MM.txt``` >> contient la liste de tous les fichiers en lignes supprimés durant le mois "MM" (selon la rotation des sauvegardes paramétrée)
 
 4. ```Plan-Azure-nom-restore-YYYY.MM.txt``` >> contient la liste de tous les fichiers restaurés durant le mois "MM"
+<br/>
+<br/>
+
+---------------------
+#  Contributing
+<br />
+
+Pour contribuer à améliorer ou corriger ce projet, merci de vous référez au [fichier contributing.md](https://github.com/Val-Bch/backup-multi-cloud/blob/master/contributing.md).
 <br/>
 <br/>
 
