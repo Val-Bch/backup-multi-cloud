@@ -24,7 +24,7 @@ Si vous trouvez un bug dans les scripts, ou souhaitez participer à l'améliorat
 ----------------------
 #  Ajouter un SDK
 <br/>
-<br/>
+
 Pour ajouter un nouveau SDK Python afin de cibler un autre cloud, il convient de respecter ces conditions : 
 
 1. Créer un sous-dossier comportant le nom du Cloud dans le dossier ```package``` (Ex : pour AWS --> ```/package/AWS/```)
