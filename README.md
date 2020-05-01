@@ -20,6 +20,7 @@ Est inclus ici le SDK Python 'Stockage Blob Azure v12' de Microsoft.
   - [Lancement Avancé](#lancement-avancé)
     - [Arguments](#arguments)
     - [Automatisation](#automatisation)
+  - [Ajouter un SDK](#Ajouter-un-SDK)
 - [Log](#les-fichiers-logs)
 - [Licence](#licence)
 - [Contribution](#contribution)
@@ -49,7 +50,7 @@ Est inclus ici le SDK Python 'Stockage Blob Azure v12' de Microsoft.
 ------------------
 # Lancement Rapide
 
- 1. Tout d'abord, vérifiez les Prérequis ci-dessus.
+1. Tout d'abord, vérifiez les Prérequis ci-dessus.
 
 2. Clonnez ensuite le dépot Github dans un dossier local. [Lien](https://github.com/Val-Bch/backup-multi-cloud.git)
 
@@ -85,13 +86,13 @@ Le script backup-multi-cloud.py prend en charge la liste des arguments suivants 
 |--verbose (-v)               | (par défaut)    | Force le print à s'activer                            |
 <br/>
 
-*Exemples :* 
+**Exemples :**
 
 ```C:/Python38-32/python.exe c:/backup-multi-cloud/backup-multi-cloud.py -a save -p Plan-Azure-demo.cfg```<br/>
-Cette commande (Windows) effectuera une sauvegarde, en utilisant les paramètres du plan "Plan-Azure-demo.cfg".
+Cette commande (Windows) effectuera une sauvegarde, en utilisant les paramètres du plan "Plan-Azure-demo.cfg" (préalablement créé)
 
 ```./backup-multi-cloud.py -a create```<br/>
-Cette commande (Linux) permettra d'assister pas à pas la création d'un nouveau plan de sauvegarde.
+Cette commande (Linux) permettra de créer de manière assistée un nouveau plan de sauvegarde.
 <br/>
 <br/>
 
@@ -99,7 +100,7 @@ Cette commande (Linux) permettra d'assister pas à pas la création d'un nouveau
 ##   Automatisation
 
 Le script backup-multi-cloud.py a pour objectif d'être automatisé pour effectuer des sauvegardes.
-Pour ce faire, l'emplois de l'argument ```--quiet (-q)``` est *obligatoire* pour ne pas produire de sortie d'affichage (print).
+Pour ce faire, l'emplois de l'argument ```--quiet (-q)``` est **obligatoire** pour ne pas produire de sortie d'affichage (print).
 <br/>
 
 -------------
@@ -137,8 +138,27 @@ Pour un système Windows utilisant le Planificateur de Taches.
 <br/>
 
 ----------------------
-#  Log
+##  Ajouter un SDK
+<br/>
+<br/>
+Pour ajouter un nouveau SDK Python pour cibler un autre cloud, il convient de respecter ces conditions : 
 
+1. Créer un sous-dossier comportant le nom du Cloud dans le dossier ```package``` (Ex : pour AWS --> ```/package/AWS/```)
+
+2. Placer dedans le fichier.py du SDK en respectant cette syntaxe : ```sdk_xxxx.py``` (Ex : pour AWS --> ```/package/AWS/sdk_aws.py```)
+
+3. Ajouter les 3 fonctions suivantes dans le fichier ```sdk_xxxx.py``` : 
+  - ```def create_azure(file_conf, path_conf, path_log):```
+  - ```def save_azure(file_path, choix_plan, init_path, path_log):```
+  - ```def restore_azure(file_path, choix_plan, init_path, path_log):```
+
+4. La fonction create : 
+  - Permet d'ajouter au fichier de configuration du plan (Ex : Plan-AWS-demo.cfg) les particularités de connexions et d'utilisation du Cloud ciblé.  
+  Pour Azure par exemple, il est recommandé d'utiliser une variable d'environnement nommée "AZURE_STORAGE_CONNECTION_STRING" et les conteneurs doivent respecter certains critères de nommage.
+
+
+----------------------
+#  Log
 Le script est multi plateforme (Windows/Linux) et utilise ses propres fichiers de logs.
 Ces derniers sont contenus dans le sous-dossier "backup-multi-cloud//log" 
 
@@ -156,6 +176,6 @@ Il y a 4 types de logs.
 #  License
 
  <p><a href="https://github.com/Val-Bch/backup-multi-cloud/blob/master/LICENSE">
- <img width=6% src="https://www.gnu.org/graphics/gplv3-or-later.svg"/>
+ <img width=6% src="https://www.gnu.org/graphics/gplv3-or-later.svg"/>  
  "backup-multi-cloud.py" et "sdk_azure.py" sont sous licence GNU General Public License v3.0 
  </a></p>
