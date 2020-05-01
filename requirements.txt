@@ -1,2 +1,2 @@
-#Azure Storage Blobs client library for Python
+#Azure Storage Blobs client library for Python 
 azure-storage-blob==12.3.0 

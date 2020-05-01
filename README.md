@@ -64,9 +64,9 @@ Est inclus ici le SDK Python 'Stockage Blob Azure v12' de Microsoft.
            ou ```python3 /backup-multi-cloud/backup-multi-cloud.py```
 
 5. Laissez-vous guider :) 
+<br/>
 
 ------------------
-<br/>
 
 # Lancement Avancé
 
@@ -143,6 +143,7 @@ Pour un système Windows utilisant le Planificateur de Taches.
 <br/>
 
 Voir le détail dans le [fichier contributing.md](https://github.com/Val-Bch/backup-multi-cloud/blob/master/contributing.md#Ajouter-un-SDK).
+
 <br/>
 <br/>
 
@@ -159,6 +160,7 @@ Il y a 4 types de logs.
 3. ```Plan-Azure-nom-delete-YYYY.MM.txt``` >> contient la liste de tous les fichiers en lignes supprimés durant le mois "MM" (selon la rotation des sauvegardes paramétrée)
 
 4. ```Plan-Azure-nom-restore-YYYY.MM.txt``` >> contient la liste de tous les fichiers restaurés durant le mois "MM"
+
 <br/>
 <br/>
 
@@ -167,6 +169,7 @@ Il y a 4 types de logs.
 <br />
 
 Pour contribuer à améliorer ou corriger ce projet, merci de vous référez au [fichier contributing.md](https://github.com/Val-Bch/backup-multi-cloud/blob/master/contributing.md).
+
 <br/>
 <br/>
 
