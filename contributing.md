@@ -17,7 +17,7 @@ Si vous trouvez un bug dans les scripts, ou souhaitez participer à l'améliorat
 
 1. Merci de créer une [nouvelle issue](https://github.com/Val-Bch/backup-multi-cloud/issues/new/choose) 
 
-2. Ou merci de me faire part de vos idées par mail --> [val.b36+bmc@pm.me](mailto:val.b36+bmc@pm.me)
+2. Ou merci de me faire part de vos idées par mail --> [valentin-boucher+bmc@pm.me](mailto:valentin-boucher+bmc@pm.me)
 <br />
 <br />
 
