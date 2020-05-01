@@ -53,17 +53,17 @@ Est inclus ici le SDK Python 'Stockage Blob Azure v12' de Microsoft.
 
 1. Tout d'abord, vérifiez les Prérequis ci-dessus.
 
-2. Clonnez ensuite le dépot Github dans un dossier local. [Lien](https://github.com/Val-Bch/backup-multi-cloud.git)
+2. Clonez ensuite le dépôt Github dans un dossier local. [Lien](https://github.com/Val-Bch/backup-multi-cloud.git)
 
-3. Assurez vous que le script à bien le droit de s'éxécuter et qu'il à les droits R/W dans le repertoire où il se trouve.
+3. Assurez-vous que le script à bien le droit de s'exécuter et qu'il à les droits R/W dans le répertoire où il se trouve.
 
-4. Lancer le script avec Python. 
+4. Lancez le script avec Python. 
   Exemples : 
     - Windows : ```C:/Python38-32/python.exe c:/backup-multi-cloud/backup-multi-cloud.py```
     - Linux : ```./backup-multi-cloud/backup-multi-cloud.py```  
            ou ```python3 /backup-multi-cloud/backup-multi-cloud.py```
 
-5. Laissez vous guider :) 
+5. Laissez-vous guider :) 
 
 ------------------
 <br/>
@@ -83,7 +83,7 @@ Le script backup-multi-cloud.py prend en charge la liste des arguments suivants 
 |--action (-a)                | save            | Exécute un plan de sauvegarde existant                |
 |--action (-a)                | restore         | Restaure une sauvegarde                               |
 |--plan (-p)                  | nomduplan.cfg   | Cible un plan existant                                |
-|--quiet (-q)                 |                 | Empèche le print de fonctionner                       |
+|--quiet (-q)                 |                 | Empêche le print de fonctionner                       |
 |--verbose (-v)               | (par défaut)    | Force le print à s'activer                            |
 <br/>
 
@@ -114,7 +114,7 @@ Pour un système Linux utilisant Crontab voici des exemples de réglages.
 2. Saisir :  ```05 2 * * * usr/backup-multi-cloud/backup-multi-cloud.py -q -a save -p Plan-Azure-demo.cfg  >/dev/null 2>&1```  
 (Exécutera le script pour effectuer une sauvegarde tous les jours à 2h05) 
 
-3. Sauvegarder et quitter l'editeur choisi
+3. Sauvegarder et quitter l'éditeur choisi
 
 Si rien ne se produit, merci de consulter le fichier de log ```/backup-multi-cloud/log/0-log-error.txt``` pour comprendre l'origine de l'erreur.
 <br/>

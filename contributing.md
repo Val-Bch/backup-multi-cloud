@@ -6,12 +6,12 @@ Ce projet utilise Git. Pour l'installer et l'utiliser, rendez-vous sur [le site 
 
 1. La première chose à faire est de [forker le repository](https://help.github.com/articles/fork-a-repo/).
 
-2. Récupérez le code de votre fork et faites le évoluer selon vos idées.
+2. Récupérez le code de votre fork et faites-le évoluer selon vos idées.
 <br />
 <br />
 
 ----------------------
-# Signaler des bug ou suggérer des améliorations
+# Signaler des bugs ou suggérer des améliorations
 
 Si vous trouvez un bug dans les scripts, ou souhaitez participer à l'amélioration du programme : 
 
@@ -41,7 +41,7 @@ Pour ajouter un nouveau SDK Python afin de cibler un autre cloud, il convient de
         Pour Azure par exemple, il est recommandé d'utiliser une variable d'environnement nommée "AZURE_STORAGE_CONNECTION_STRING" qui contient la chaine de connexion au compte et les conteneurs doivent respecter certains critères de nommage.
       
     +. La fonction save :  
-      - Permet d'éxécuter une sauvegarde. Celà comprend les particularités d'usage du SDK du Cloud ciblé, la gestion des rotations de sauvegardes, et le log dans un fichier.txt.  
+      - Permet d'exécuter une sauvegarde. Cela comprend les particularités d'usage du SDK du Cloud ciblé, la gestion des rotations de sauvegardes, et le log dans un fichier.txt.  
       Il faut s'appuyer sur les fonctions d'upload et de suppression en ligne du SDK.
 
     +. La fonction restore :  

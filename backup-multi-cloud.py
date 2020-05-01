@@ -17,6 +17,7 @@ except: # Stop le script si manquant avec une explication
     print("Le dossier 'package' contenant les SDK est absent ou il manque des SDK dedans. Veuillez le télécharger depuis GitHub.")
     sys.exit()
 
+
 ##################################################################################
 #   Gestion du lancement, de l'aide, et des arguments optionnels et positionnels #
 
@@ -28,8 +29,9 @@ parser.add_argument("-a", "--action", nargs='+', help="Choisir une action : crea
 parser.add_argument("-p", "--plan", nargs='+', help="Indiquer le nom du fichier.cfg a lire.")
 args = parser.parse_args()
 
-#################################################################
-#   Fonction d'activation/desactivation du mode verbeux         #
+
+##########################################################
+#   Fonction d'activation/désactivation du mode verbeux  #
 def enablePrint():
     """Fontion a appeler pour activer l'affichage (verbose)."""
     sys.stdout = sys.__stdout__
@@ -39,10 +41,10 @@ def blockPrint():
     sys.stdout = open(os.devnull, 'w')
 
 
-########################################
-#   Déclaration des variables gobales  #
+#########################################
+#   Déclaration des variables globales  #
 init_path = os.path.abspath(os.path.dirname( __file__)) # Récupère le chemin absolu du script
-path_conf = init_path + "/conf"                         # Ajoute et créé si besoinle sous dossier 'conf' à ce chemin
+path_conf = init_path + "/conf"                         # Ajoute et créé si besoin le sous dossier 'conf' à ce chemin
 if not os.path.isdir(path_conf):
     os.makedirs(path_conf)
 path_package = init_path + "/package"                   # Ajoute le sous dossier 'package' à ce chemin
@@ -115,7 +117,7 @@ def listing_plan():
                 if choix_user == "help":                                                                            # Si saisie = help, affiche des explications
                     print("###########################\n|\tAIDE\n|")
                     print("|- Saisir un nombre entier de liste correspondant à un nom de fichier.\n|\t~~ Exemple ~~\n|"+str(dct_conf))
-                    print("|- Dans cette liste si le nombre saisi est '1', le fichier selectionné sera '"+str(dct_conf[int(1)])+"'")
+                    print("|- Dans cette liste si le nombre saisi est '1', le fichier sélectionné sera '"+str(dct_conf[int(1)])+"'")
                     print("###########################")
 
                 elif not choix_user:                                                                 # Si la saisie est vide, réaffiche les choix possibles
@@ -143,13 +145,13 @@ def creation():
     """
     global file_path
 
-    listing_cloud()     # Appel de la fontion pour lister les plateformes cloud disponible
+    listing_cloud()     # Appel de la fonction pour lister les plateformes cloud disponible
     
     while True:         # Boucle pour la construction du fichier de conf .cfg
         plan_name = input("----------------\nDonner un nom/numéro unique à votre plan : ")
 
         file_conf = "Plan-" + str(choix_cloud) +"-"+ str(plan_name)+".cfg"    # Construction du nom du fichier.cfg
-        file_path = os.path.join(path_conf, file_conf)                        # Contruction du chemin absolu pour mener au fichier .cfg
+        file_path = os.path.join(path_conf, file_conf)                        # Construction du chemin absolu pour mener au fichier .cfg
         file_exists = os.path.isfile(file_path)                               # Variable de test sur l'existence d'un fichier homonyme dans le dossier ./conf
 
         print("Le nom du fichier enregistré dans le dossier './conf' sera : "+ file_conf)
@@ -163,9 +165,9 @@ def creation():
                 continue
         
         cfg.add_section(file_conf)                              # Création d'une nouvelle section portant le nom du fichier
-        cfg.set(file_conf, 'cloud_cible', str(choix_cloud))     # Création d'une nouvelle clé dans la section qui définie la plateforme cloud choisi
+        cfg.set(file_conf, 'cloud_cible', str(choix_cloud))     # Création d'une nouvelle clé dans la section qui définit la plateforme cloud choisi
         while True:
-            path_source = input("----------------\nSaisir le chemin absolu du repertoire à sauvegarder (help) : ")
+            path_source = input("----------------\nSaisir le chemin absolu du répertoire à sauvegarder (help) : ")
             if path_source== "help":     # Si saisie = help, affiche des explications
                 print("###########################\n|\t    AIDE\n|")
                 print("| ~~ Fonctionnement ~~\n|- Saisir le chemin absolu du dossier racine à sauvegarder.\n|- Le contenu de ce dossier sera sauvegardé de manière récursive.\n|")
@@ -179,7 +181,7 @@ def creation():
                     print("Tout le contenu de '"+path_source+"' sera sauvegardé.")
                     break
                 else: 
-                    print("!! Attention, ce repertoire semble ne pas exister, si vous continuez, merci de le créer avant de lancer une sauvegarde.")
+                    print("!! Attention, ce répertoire semble ne pas exister, si vous continuez, merci de le créer avant de lancer une sauvegarde.")
                     try: 
                         alerte = input("Continuer ? (o/n) : ")
                         if alerte == "o" or not alerte:
@@ -198,10 +200,10 @@ def creation():
                              
             if bkp_rotate== "help":     # Si saisie = help, affiche des explications
                 print("###########################\n|\t    AIDE\n|")
-                print("| ~~ Fonctionnement ~~\n|- Saisir un nombre entier >=0\n|- 0 = ne jamais effacer les sauvegardes\n|- Le calcul se base sur la date au moment de l'éxécution d'une sauvegarde.\n|")
+                print("| ~~ Fonctionnement ~~\n|- Saisir un nombre entier >=0\n|- 0 = ne jamais effacer les sauvegardes\n|- Le calcul se base sur la date au moment de l'exécution d'une sauvegarde.\n|")
                 print("| ~~ Exemple ~~\n|- Nombre choisi = '7'\n|- Une sauvegarde est planifiée tous les jours, à midi :")
-                print("|  --> Les sauvegardes en ligne depuis 7 jours et + (à la date d'éxécution) seront supprimées.")
-                print("|  --> Ici, il restera donc toujours 7 sauvegardes en ligne dans le contenaire.")
+                print("|  --> Les sauvegardes en ligne depuis 7 jours et + (à la date d'exécution) seront supprimées.")
+                print("|  --> Ici, il restera donc toujours 7 sauvegardes en ligne dans le conteneur.")
                 print("###########################")
             elif not bkp_rotate:            # Si la saisie est vide, on applique la valeur par défaut et on affiche 'result'
                 bkp_rotate = 7
@@ -225,8 +227,8 @@ def creation():
                 print("###########################\n|\t    AIDE\n|")
                 print("| ~~ Fonctionnement ~~\n|- Saisir un nombre entier >=0\n|- 0 = ne jamais effacer les logs\n|- 3 fichiers log.txt sont créés par plan de sauvegarde et par mois")
                 print("|  --> (1 par opération effectuée sur le cloud (upload/download/del)) \n|")
-                print("| ~~ Exemple ~~\n|- Nombre choisi = '12'\n| (On considère que chaque type d'opération est éxécuté au moins 1 fois/mois (up/dl/del))")
-                print("|  --> Les logs existants depuis 12 mois et + (à la date d'éxécution d'une save) seront supprimés.")
+                print("| ~~ Exemple ~~\n|- Nombre choisi = '12'\n| (On considère que chaque type d'opération est exécuté au moins 1 fois/mois (up/dl/del))")
+                print("|  --> Les logs existants depuis 12 mois et + (à la date d'exécution d'une save) seront supprimés.")
                 print("|  --> Ici, dans 1 an, il restera donc 36 fichiers de logs pour ce plan (12 fichiers pour chacune des 3 opérations (up/dl/del)).")
                 print("###########################")
             elif not log_rotate:            # Si la saisie est vide, on applique la valeur par défaut 
@@ -243,10 +245,10 @@ def creation():
             else:
                 continue
 
-        cfg.set(file_conf, 'path_source', str(path_source))         # Création d'une clé dans la section qui définie la source locale à sauvegarder
-        cfg.set(file_conf, 'bkp_rotate', str(bkp_rotate))           # Création d'une clé dans la section qui définie le nombre de sauvegardes à conserver en ligne
-        cfg.set(file_conf, 'log_rotate', str(log_rotate))           # Création d'une clé dans la section qui définie le nombre de logs à conserver
-        cfg.write(open(file_path,'w'))                              # Saisie les entrées précédantes dans le fichier.cfg
+        cfg.set(file_conf, 'path_source', str(path_source))         # Création d'une clé dans la section qui définit la source locale à sauvegarder
+        cfg.set(file_conf, 'bkp_rotate', str(bkp_rotate))           # Création d'une clé dans la section qui définit le nombre de sauvegardes à conserver en ligne
+        cfg.set(file_conf, 'log_rotate', str(log_rotate))           # Création d'une clé dans la section qui définit le nombre de logs à conserver
+        cfg.write(open(file_path,'w'))                              # Saisie les entrées précédentes dans le fichier.cfg
         cloud_create_conf = 'create_' + choix_cloud.lower()         # Construction d'une variable selon le nom de la plateforme de cloud choisie
         
         # Appel la fonction définie dans les packages selon les choix établis
@@ -258,7 +260,7 @@ def creation():
 
 def execution (choix_user):
     """
-    Fonction d'éxécution d'un plan de sauvegarde existant.\n
+    Fonction d'exécution d'un plan de sauvegarde existant.\n
     Répond à l'argument de lancement '-a save'.
     Utilise le paramètre :
     - choix_user = nom du fichier .cfg défini par l'argument de lancement '-p Plan-x-x.cfg'
@@ -358,11 +360,11 @@ def lancement(mode):
                         execution(choix_plan)
                         break
             else:
-                if args.quiet is True or args.quiet is False:   # Sinon quelque soit l'état de quiet et que l'argument --plan est absent, on force le print + message dans les log pour les Cron
+                if args.quiet is True or args.quiet is False:   # Sinon quel que soit l'état de quiet et que l'argument --plan est absent, on force le print + message dans les log pour les Cron
                     enablePrint()
                     print("ERREUR = 'Argument --plan (-p) invalide.'")
                     with open(path_log+'/0-log-error.txt', 'a') as file:
-                        file.write("\n"+datetime.now().strftime('%Y-%m-%d-%Hh-%Mm')+" : ERREUR = ' Mode Quiet activé + Argument --plan (-p) absent/invalide. \n\t\t\t\tLe script passe en mode verbose auto pour continuer une éxécution manuelle. \n\t\t\t\tSi l'éxécution provient d'une tâche planifiée, celle-ci ne s'est pas éxécutée correctement.'" )
+                        file.write("\n"+datetime.now().strftime('%Y-%m-%d-%Hh-%Mm')+" : ERREUR = ' Mode Quiet activé + Argument --plan (-p) absent/invalide. \n\t\t\t\tLe script passe en mode verbose auto pour continuer une exécution manuelle. \n\t\t\t\tSi l'exécution provient d'une tâche planifiée, celle-ci ne s'est pas exécutée correctement.'" )
                     execution(choix_plan)
                     break
 
