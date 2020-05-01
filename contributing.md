@@ -22,7 +22,7 @@ Si vous trouvez un bug dans les scripts, ou souhaitez participer à l'améliorat
 <br />
 
 ----------------------
-##  Ajouter un SDK
+#  Ajouter un SDK
 <br/>
 <br/>
 Pour ajouter un nouveau SDK Python afin de cibler un autre cloud, il convient de respecter ces conditions : 

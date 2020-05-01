@@ -138,7 +138,7 @@ Pour un système Windows utilisant le Planificateur de Taches.
 <br/>
 
 ----------------------
-##  Ajouter un SDK
+#  Ajouter un SDK
 <br/>
 <br/>
 
