@@ -142,7 +142,7 @@ Pour un système Windows utilisant le Planificateur de Taches.
 #  Ajouter un SDK
 <br/>
 
-Voir le détail dans le [fichier contributing.md](https://github.com/Val-Bch/backup-multi-cloud/blob/master/contributing.md).
+Voir le détail dans le [fichier contributing.md](https://github.com/Val-Bch/backup-multi-cloud/blob/master/contributing.md#Ajouter-un-SDK).
 <br/>
 <br/>
 
