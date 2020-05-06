@@ -31,8 +31,8 @@ Est inclus ici le SDK Python 'Stockage Blob Azure v12' de Microsoft.
 # Prérequis
 
 - Microsoft ou Linux (Testé sous Debian, Ubuntu et Windows 10)
-- Python 3 ou >
-- Package Azure : {pip install azure-storage-blob}
+- Python 3 ou +
+- Package Azure : {pip3 install azure-storage-blob} ou {pip install -r requirements.txt}
 - Compte Azure avec un abonnement actif. [Créez un compte gratuitement](https://azure.microsoft.com/free/?ref=microsoft.com&utm_source=microsoft.com&utm_medium=docs&utm_campaign=visualstudio).
 - Un compte de stockage Azure (Blob pas DataLake). [Créer un compte de stockage](https://docs.microsoft.com/fr-fr/azure/storage/common/storage-account-create).
 - Variable d'environnement (AZURE_STORAGE_CONNECTION_STRING) contenant la chaine de connexion --> [Voir ici](https://docs.microsoft.com/fr-fr/azure/storage/blobs/storage-quickstart-blobs-python#configure-your-storage-connection-string)
@@ -51,13 +51,13 @@ Est inclus ici le SDK Python 'Stockage Blob Azure v12' de Microsoft.
 ------------------
 # Lancement Rapide
 
-1. Tout d'abord, vérifiez les Prérequis ci-dessus.
+1. Tout d'abord, vérifiez les [Prérequis](#Prérequis) ci-dessus.
 
 2. Clonez ensuite le dépôt Github dans un dossier local. [Lien](https://github.com/Val-Bch/backup-multi-cloud.git)
 
 3. Assurez-vous que le script à bien le droit de s'exécuter et qu'il à les droits R/W dans le répertoire où il se trouve.
 
-4. Lancez le script avec Python. 
+4. Lancez le script avec Python3. 
   Exemples : 
     - Windows : ```C:/Python38-32/python.exe c:/backup-multi-cloud/backup-multi-cloud.py```
     - Linux : ```./backup-multi-cloud/backup-multi-cloud.py```  

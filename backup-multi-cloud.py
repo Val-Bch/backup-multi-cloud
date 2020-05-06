@@ -15,6 +15,7 @@ try:    # Test d'import des SDK et de la présence du dossier 'package'
     import package.Azure.sdk_azure
 except: # Stop le script si manquant avec une explication
     print("Le dossier 'package' contenant les SDK est absent ou il manque des SDK dedans. Veuillez le télécharger depuis GitHub.")
+    print("Il est aussi possible que le package officiel du SDK ne soit pas installé. Exécuter 'pip3 install -r requirements.txt'. ")
     sys.exit()
 
 

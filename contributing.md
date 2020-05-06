@@ -31,7 +31,9 @@ Pour ajouter un nouveau SDK Python afin de cibler un autre cloud, il convient de
 
 2. Placer dedans le fichier.py du SDK en respectant cette syntaxe : ```sdk_xxxx.py``` (Ex : pour AWS --> ```/package/AWS/sdk_aws.py```)
 
-3. Ajouter les 3 fonctions suivantes dans le fichier ```sdk_xxxx.py``` où ```xxxx``` est le nom du cloud : 
+3. Créer l'import du package selon le modèle existant au début du script principal ```backup-multi-cloud.py``` 
+
+4. Ajouter les 3 fonctions suivantes dans le fichier ```sdk_xxxx.py``` où ```xxxx``` est le nom du cloud : 
     - ```def create_xxxx(file_conf, path_conf, path_log):```
     - ```def save_xxxx(file_path, choix_plan, init_path, path_log):```
     - ```def restore_xxxx(file_path, choix_plan, init_path, path_log):```
@@ -48,4 +50,4 @@ Pour ajouter un nouveau SDK Python afin de cibler un autre cloud, il convient de
       - Permet de lister les sauvegardes présentent en ligne et de proposer d'en choisir une a restaurer puis de logger le résultat.  
       Il faut s'appuyer sur une fonction de listage et une fonction de download du SDK.
 
-4. Adapter les paramètres requis par le SDK en fonction des paramètres transmis à l'appel des fonctions create, save et restore.
+5. Adapter les paramètres requis par le SDK en fonction des paramètres transmis à l'appel des fonctions create, save et restore.
